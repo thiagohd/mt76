@@ -19,9 +19,9 @@ del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash
 del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
 
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "sed -e '/PKG_SOURCE_VERSION:/{r %HASH%' -e 'd}' openwrt/package/kernel/mt76/Makefile > openwrt/package/kernel/mt76/makefile ; cp openwrt/package/kernel/mt76/makefile openwrt/package/kernel/mt76/Makefile ; sed -e '/PKG_SOURCE_DATE:/{r %DATA%' -e 'd}' openwrt/package/kernel/mt76/Makefile > openwrt/package/kernel/mt76/makefile ; cp openwrt/package/kernel/mt76/makefile openwrt/package/kernel/mt76/Makefile"
+plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "sed -e '/PKG_SOURCE_VERSION:/{r %HASH%' -e 'd}' package/kernel/mt76/Makefile > package/kernel/mt76/makefile ; cp package/kernel/mt76/makefile package/kernel/mt76/Makefile ; sed -e '/PKG_SOURCE_DATE:/{r %DATA%' -e 'd}' package/kernel/mt76/Makefile > package/kernel/mt76/makefile ; cp package/kernel/mt76/makefile package/kernel/mt76/Makefile"
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt/openwrt/ ; make /package/kernel/mt76/clean ; make /package/kernel/mt76/compile V=99"
+plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99"
 
 
 pause
