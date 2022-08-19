@@ -4,7 +4,6 @@
 #include "mt7603.h"
 #include "mac.h"
 #include "eeprom.h"
-#include <stdio.h>
 
 const struct mt76_driver_ops mt7603_drv_ops = {
 	.txwi_size = MT_TXD_SIZE,
