@@ -9,8 +9,8 @@ git add --all
 git commit -m "%commit_msg%"
 git push 
 
-git log -n 1 --date=short --pretty=format:'PKG_SOURCE_VERSION:=%%H%%n' > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
-git log -n 1 --date=short --pretty=format:'PKG_SOURCE_DATE:=%%ad%%n' > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
 
 set /p HASH=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
 set /p DATA=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
