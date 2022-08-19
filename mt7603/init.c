@@ -4,6 +4,7 @@
 #include "mt7603.h"
 #include "mac.h"
 #include "eeprom.h"
+#include <stdio.h>
 
 const struct mt76_driver_ops mt7603_drv_ops = {
 	.txwi_size = MT_TXD_SIZE,
@@ -464,12 +465,18 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 		max_offset = max(max_offset, cur_offset);
 	}
 
+	printk("Kernel print teste:\n");
+	printk("MT_EE_TX_POWER_TSSI_OFF = %x\n",MT_EE_TX_POWER_TSSI_OFF);
+	printk("target_power = %d\n",target_power);
+
 	target_power += max_offset;
 
 	dev->tx_power_limit = target_power;
 	dev->mphy.txpower_cur = target_power;
 
 	target_power = DIV_ROUND_UP(target_power, 2);
+
+	target_power = 27;
 
 	/* add 3 dBm for 2SS devices (combined output) */
 	if (dev->mphy.antenna_mask & BIT(1))
