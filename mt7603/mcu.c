@@ -377,14 +377,16 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 
 	memcpy(req.temp_comp_power, eep + MT_EE_STEP_NUM_NEG_6_7,
 	       sizeof(req.temp_comp_power));
-	
+	printk("##################################### mt7603_mcu_set_tx_power #########################################\n");
+	printk("target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
 	req.target_power[0] = 27;
 	req.target_power[1] = 27;
-	printk("##################################### SET TX POWER #########################################\n");
-	printk("target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
+	printk("after target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
 
-	return mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
+	int result = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
 				 &req, sizeof(req), true);
+	printk("RESULT = %d\n",result);
+	return result;
 }
 
 int mt7603_mcu_set_channel(struct mt7603_dev *dev)
@@ -424,7 +426,8 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 		tx_power -= 6;
 	tx_power = min(tx_power, dev->tx_power_limit);
 	
-	tx_power = 54;
+	printk("##################################### mt7603_mcu_set_channel #########################################\n");
+	printk("target power = %d\n",tx_power);
 
 	dev->mphy.txpower_cur = tx_power;
 

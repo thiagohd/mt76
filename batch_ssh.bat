@@ -27,6 +27,6 @@ scp fabio@192.168.1.49:~/Downloads/openwrt/bin/targets/ramips/mt76x8/openwrt-ram
 
 scp openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@192.168.171.1:/tmp/firmware.bin
 
-plink -ssh -batch root@192.168.171.1 "sysupgrade -v /tmp/firmware.bin"
+echo y | plink -ssh root@192.168.171.1 "sysupgrade -v /tmp/firmware.bin"
 
 pause
