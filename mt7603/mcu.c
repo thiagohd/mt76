@@ -340,6 +340,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 
 static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 {
+	int result;
 	struct {
 		u8 center_channel;
 		u8 tssi;
@@ -383,7 +384,7 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 	req.target_power[1] = 27;
 	printk("after target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
 
-	int result = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
+	result = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
 				 &req, sizeof(req), true);
 	printk("RESULT = %d\n",result);
 	return result;
