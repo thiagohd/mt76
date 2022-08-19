@@ -21,7 +21,7 @@ del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data
 
 plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' ~/Downloads/openwrt/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' ~/Downloads/openwrt/package/kernel/mt76/Makefile"
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt ; make package/kernel/mt76/clean ; make -j1"
+plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
 
 scp fabio@192.168.1.49:~/Downloads/openwrt/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin .
 
