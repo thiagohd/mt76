@@ -15,8 +15,8 @@ git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "C:\Users\x
 set /p HASH=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
 set /p DATA=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
 
-rm "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
-rm "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
+del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
+del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
 
 
 plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "sed -e '/PKG_SOURCE_VERSION:/{r %HASH%' -e 'd}' openwrt/package/kernel/mt76/Makefile > openwrt/package/kernel/mt76/makefile ; cp openwrt/package/kernel/mt76/makefile openwrt/package/kernel/mt76/Makefile ; sed -e '/PKG_SOURCE_DATE:/{r %DATA%' -e 'd}' openwrt/package/kernel/mt76/Makefile > openwrt/package/kernel/mt76/makefile ; cp openwrt/package/kernel/mt76/makefile openwrt/package/kernel/mt76/Makefile"
