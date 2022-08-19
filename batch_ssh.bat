@@ -19,7 +19,7 @@ del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash
 del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
 
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "sed -i '/PKG_SOURCE_VERSION/c\%HASH%' package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' package/kernel/mt76/Makefile"
+plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "sed -i '/PKG_SOURCE_VERSION/c\%HASH%' ~/Downloads/openwrt/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' ~/Downloads/openwrt/package/kernel/mt76/Makefile"
 
 plink -ssh -batch -pw asd123 fabio@192.168.1.49:~/Downloads/openwrt "make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99"
 
