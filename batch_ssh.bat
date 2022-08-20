@@ -1,11 +1,12 @@
 @ECHO off
 cls
-set vm_user_ip = fabio@192.168.1.49
-echo %vm_user_ip%
-set router_ip = 192.168.171.10
-echo %router_ip%
-set openwrt_remote_root_dir = "~/Downloads/openwrt"
-echo %openwrt_remote_root_dir%
+set openwrt_remote_root_dir="~/Downloads/openwrt"
+
+set vm_user_ip="fabio@192.168.1.49"
+
+set router_ip="192.168.171.10"
+echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
+echo "Roteador a atualizar: " %router_ip%
 
 set commit_msg =
 set /p commit_msg=Digite a mensagem e commit: 
