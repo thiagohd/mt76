@@ -446,8 +446,8 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 	printk("##################################### mt7603_mcu_set_channel #########################################\n");
 	printk("target power = %d\n",tx_power);
 	tx_power = 54;
-	dev->tx_power_limit = 30;
-	
+	dev->tx_power_limit = 54;
+
 	dev->mphy.txpower_cur = tx_power;
 
 	for (i = 0; i < ARRAY_SIZE(req.txpower); i++)
