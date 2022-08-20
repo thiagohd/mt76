@@ -1,10 +1,10 @@
-@ECHO on
+@ECHO off
 cls
-set openwrt_remote_root_dir=~/Downloads/openwrt
+set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
 set vm_user_ip=fabio@192.168.1.49
 
-set router_ip=192.168.171.20
+set router_ip=192.168.171.1
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
 echo "Roteador a atualizar: " %router_ip%
 
@@ -27,16 +27,13 @@ del "data.txt"
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\bOpenWrt\b/OpenWrt_%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/system"
 
-pause
-exit
-
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
 
-scp %vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin .
+pscp -pw -batch asd123 %vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin .
 
-scp openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@%router_ip%:/tmp/firmware.bin
+pscp -batch openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@%router_ip%:/tmp/firmware.bin
 
 echo y | plink -ssh root@%router_ip% "sysupgrade -v /tmp/firmware.bin"
 
