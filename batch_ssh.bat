@@ -1,8 +1,11 @@
 @ECHO off
 cls
 set vm_user_ip = fabio@192.168.1.49
+echo %vm_user_ip%
 set router_ip = 192.168.171.10
+echo %router_ip%
 set openwrt_remote_root_dir = "~/Downloads/openwrt"
+echo %openwrt_remote_root_dir%
 
 set commit_msg =
 set /p commit_msg=Digite a mensagem e commit: 
