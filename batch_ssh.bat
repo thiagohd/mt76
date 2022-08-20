@@ -1,10 +1,10 @@
-@ECHO off
+@ECHO on
 cls
-set openwrt_remote_root_dir="~/Downloads/openwrt"
+set openwrt_remote_root_dir=~/Downloads/openwrt
 
-set vm_user_ip="fabio@192.168.1.49"
+set vm_user_ip=fabio@192.168.1.49
 
-set router_ip="192.168.171.10"
+set router_ip=192.168.171.10
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
 echo "Roteador a atualizar: " %router_ip%
 
@@ -26,7 +26,7 @@ del "hash.txt"
 del "data.txt"
 
 
-plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g %openwrt_remote_root_dir%/files/etc/config/network" ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
 
