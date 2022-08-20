@@ -340,7 +340,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 
 static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 {
-	int result;
+	int result, i;
 	struct {
 		u8 center_channel;
 		u8 tssi;
@@ -382,12 +382,20 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 	printk("tx_power[0] =      %u(0x%02X)\n", req.target_power[0], req.target_power[0]);
 	printk("tx_power[1] =      %u(0x%02X)\n", req.target_power[1], req.target_power[1]);
 	printk("center_channel =   %u(0x%02X)\n", req.center_channel, req.center_channel);
-	printk("temp_comp =        %u(0x%02X)\n", req.temp_comp, req.temp_comp);
-	printk("temp_comp_power =  %u(0x%02X)\n", req.temp_comp_power, req.temp_comp_power);
-	printk("bw_power_delta =   %u(0x%02X)\n", req.bw_power_delta, req.bw_power_delta);
-	printk("ch_power_delta =   %u(0x%02X)\n", req.ch_power_delta, req.ch_power_delta);
-	printk("rate_power_delta = %u(0x%02X)\n", req.rate_power_delta, req.rate_power_delta);
 	printk("tssi =             %u(0x%02X)\n", req.tssi, req.tssi);
+	printk("temp_comp =        %u(0x%02X)\n", req.temp_comp, req.temp_comp);
+	printk("bw_power_delta =   %u(0x%02X)\n", req.bw_power_delta, req.bw_power_delta);
+	
+	for(i = 0; i < 17; i++){
+		printk("temp_comp_power[%d] =  %u(0x%02X)\n", i, req.temp_comp_power[i], req.temp_comp_power[i]);
+	}
+		
+	for(i = 0; i < 6; i++){
+		printk("ch_power_delta[%d] =   %u(0x%02X)\n", i, req.ch_power_delta[i], req.ch_power_delta[i]);
+	}
+	for(i = 0; i < 14; i++){
+		printk("rate_power_delta[%d] = %u(0x%02X)\n", i, req.rate_power_delta[i], req.rate_power_delta[i]);
+	}
 	req.target_power[0] = 54;
 	req.target_power[1] = 40;
 	printk("after target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
@@ -438,7 +446,8 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 	printk("##################################### mt7603_mcu_set_channel #########################################\n");
 	printk("target power = %d\n",tx_power);
 	tx_power = 54;
-	dev->tx_power_limit = 54;
+	dev->tx_power_limit = 30;
+	
 	dev->mphy.txpower_cur = tx_power;
 
 	for (i = 0; i < ARRAY_SIZE(req.txpower); i++)
