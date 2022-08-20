@@ -1,7 +1,7 @@
 @ECHO off
 cls
-set vm_user_ip = "fabio@192.168.1.49"
-set router_ip = "192.168.171.10"
+set vm_user_ip = fabio@192.168.1.49
+set router_ip = 192.168.171.10
 set openwrt_remote_root_dir = "~/Downloads/openwrt"
 
 set commit_msg =
@@ -22,7 +22,7 @@ del "hash.txt"
 del "data.txt"
 
 
-plink -ssh -batch -pw asd123 '%vm_user_ip%' "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
 
