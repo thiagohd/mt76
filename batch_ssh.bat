@@ -1,5 +1,8 @@
 @ECHO off
 cls
+set vm_user_ip = "fabio@192.168.1.49"
+set router_ip = "192.168.171.10"
+set openwrt_remote_root_dir = "~/Downloads/openwrt"
 
 set commit_msg =
 set /p commit_msg=Digite a mensagem e commit: 
@@ -9,24 +12,24 @@ git add --all
 git commit -m "%commit_msg%"
 git push 
 
-git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
-git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
 
-set /p HASH=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
-set /p DATA=<"C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
+set /p HASH=<"hash.txt"
+set /p DATA=<"data.txt"
 
-del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\hash.txt"
-del "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke\data.txt"
+del "hash.txt"
+del "data.txt"
 
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' ~/Downloads/openwrt/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' ~/Downloads/openwrt/package/kernel/mt76/Makefile"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 
-plink -ssh -batch -pw asd123 fabio@192.168.1.49 "cd ~/Downloads/openwrt ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99 ; make -j1"
 
-scp fabio@192.168.1.49:~/Downloads/openwrt/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin .
+scp %vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin .
 
-scp openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@192.168.171.1:/tmp/firmware.bin
+scp openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@%router_ip%:/tmp/firmware.bin
 
-echo y | plink -ssh root@192.168.171.1 "sysupgrade -v /tmp/firmware.bin"
+echo y | plink -ssh root@%router_ip% "sysupgrade -v /tmp/firmware.bin"
 
 pause
