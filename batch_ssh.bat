@@ -4,7 +4,7 @@ set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
 set vm_user_ip=fabio@192.168.1.49
 
-set router_ip=192.168.171.20
+set router_ip=192.168.171.10
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
 echo "Roteador a atualizar: " %router_ip%
 
