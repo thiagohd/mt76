@@ -4,7 +4,7 @@ set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
 set vm_user_ip=fabio@192.168.1.49
 
-set router_ip=192.168.171.10
+set router_ip=192.168.171.20
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
 echo "Roteador a atualizar: " %router_ip%
 
@@ -35,6 +35,6 @@ pscp -batch -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramip
 
 scp ./openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin root@%router_ip%:/tmp/firmware.bin
 
-echo y | plink -ssh root@%router_ip% "sysupgrade -v /tmp/firmware.bin"
+echo y | plink -ssh root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
 pause
