@@ -465,7 +465,7 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	if (target_power & BIT(6))
 		target_power = -(target_power & GENMASK(5, 0));
 
-	printk("target_power = %d | GENMASK = %08X", target_power, GENMASK(5,0));
+	printk("target_power = %d | GENMASK = %lX", target_power, GENMASK(5,0));
 
 	max_offset = 0;
 	for (i = 0; i < 14; i++) {
