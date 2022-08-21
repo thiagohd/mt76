@@ -451,51 +451,51 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	bool ext_pa = eeprom[MT_EE_NIC_CONF_0 + 1] & BIT(1);
 	int max_offset, cur_offset;
 	int i;
-	printk("=================== mt7603_init_txpower =================\n");
-	printk("EXT_PA (reg MT_EE_NIC_CONF_0+1 %02X=%02X) = %s", MT_EE_NIC_CONF_0+1, eeprom[MT_EE_NIC_CONF_0 + 1], ext_pa == true ? "true" : "false");
+	printk("[deicke] =================== mt7603_init_txpower =================\n");
+	printk("[deicke] EXT_PA (reg MT_EE_NIC_CONF_0+1 addr_0x%02X=val_0x%02X[%d]) = %s", MT_EE_NIC_CONF_0+1, eeprom[MT_EE_NIC_CONF_0 + 1], eeprom[MT_EE_NIC_CONF_0 + 1], ext_pa == true ? "true" : "false");
 
-	printk("target_power (reg MT_EE_TX_POWER_0_START_2G+2 %02X=%02X)", (MT_EE_TX_POWER_0_START_2G + 2), target_power);
+	printk("[deicke] target_power (reg MT_EE_TX_POWER_0_START_2G+2 addr_0x%02X=val_0x%02X[%d])", (MT_EE_TX_POWER_0_START_2G + 2), target_power, target_power);
 
 	if (ext_pa && is_mt7603(dev))
 		target_power = eeprom[MT_EE_TX_POWER_TSSI_OFF] & ~BIT(7);
 
-	printk("target_power (reg MT_EE_TX_POWER_TSSI_OFF %02X=%02X)", MT_EE_TX_POWER_TSSI_OFF, target_power);
+	printk("[deicke] target_power (reg MT_EE_TX_POWER_TSSI_OFF addr_0x%02X=val_0x%02X[%d])", MT_EE_TX_POWER_TSSI_OFF, target_power, target_power);
 
 
 	if (target_power & BIT(6))
 		target_power = -(target_power & GENMASK(5, 0));
 
-	printk("target_power = %d | GENMASK = %lX", target_power, GENMASK(5,0));
+	printk("[deicke] target_power = val_0x%02X[%d] | GENMASK = %lX", target_power, target_power, GENMASK(5,0));
 
 	max_offset = 0;
 	for (i = 0; i < 14; i++) {
 		cur_offset = mt7603_txpower_signed(rate_power[i]);
 		max_offset = max(max_offset, cur_offset);
 	}
-	printk("max offset %d", max_offset);
+	printk("[deicke] max offset 0x%02X[%d]", max_offset, max_offset);
 
 	target_power += max_offset;
 
 	dev->tx_power_limit = target_power;
 	dev->mphy.txpower_cur = target_power;
 
-	printk("target_power+offset = power_limit = txpower_cur = %d", target_power);
+	printk("[deicke] target_power+offset = power_limit = txpower_cur = val_0x%02X[%d]", target_power, target_power);
 
 
 	target_power = DIV_ROUND_UP(target_power, 2);
-	printk("target_power = %d", target_power);
+	printk("[deicke] target_power = val_0x%02X[%d]", target_power,target_power);
 
 	//target_power = 27;
 
 	/* add 3 dBm for 2SS devices (combined output) */
 	if (dev->mphy.antenna_mask & BIT(1))
 		target_power += 3;
-	printk("target_power 2SS? = %d", target_power);
+	printk("[deicke] target_power 2SS? = val_0x%02X[%d]", target_power, target_power);
 	for (i = 0; i < sband->n_channels; i++) {
 		chan = &sband->channels[i];
 		chan->max_power = min_t(int, chan->max_reg_power, target_power);
 		chan->orig_mpwr = target_power;
-		printk("chan[%d]_max_power = %d | orig = %d", i, chan->max_power, chan->orig_mpwr);
+		printk("[deicke] chan[%d]_max_power = %d | orig = %d", i, chan->max_power, chan->orig_mpwr);
 	}
 }
 
