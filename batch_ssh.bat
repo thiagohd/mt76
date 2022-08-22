@@ -1,4 +1,4 @@
-@ECHO on
+@ECHO off
 cls
 set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
@@ -19,21 +19,26 @@ echo [ 1 ] para cancelar operacao
 echo [ 2 ] para pular commit e seguir para compilacao/gravacao
 
 set commit_msg=
+
 set /p commit_msg=
-echo %commit_msg%
-pause
-if %commit_msg%=='1' (
+
+set commit_msg="%commit_msg%"
+
+
+IF %commit_msg%==1 (
 	echo Cancelado!
 	goto finish
 )
-echo continuar
-pause
+
+
 del "C:\Users\xpert\.ssh\known_hosts"
+
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
+
 if NOT %commit_msg%=='2' (
 	echo Commitando projeto...
 	git add --all
-	git commit -m "%commit_msg%"
+	git commit -m %commit_msg%
 	git push 
 
 	git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
