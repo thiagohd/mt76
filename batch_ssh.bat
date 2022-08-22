@@ -36,7 +36,7 @@ del "C:\Users\xpert\.ssh\known_hosts"
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
 
 if NOT %commit_msg%=="2" (
-	echo Commitando projeto...
+	echo Commitando projeto... mensagem do commit: %commit_msg%
 	git add --all
 	git commit -m %commit_msg%
 	git push 
