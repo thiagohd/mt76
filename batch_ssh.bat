@@ -25,7 +25,7 @@ set /p commit_msg=
 set commit_msg="%commit_msg%"
 
 
-IF %commit_msg%==1 (
+IF %commit_msg%=="1" (
 	echo Cancelado!
 	goto finish
 )
@@ -35,7 +35,7 @@ del "C:\Users\xpert\.ssh\known_hosts"
 
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
 
-if NOT %commit_msg%=='2' (
+if NOT %commit_msg%=="2" (
 	echo Commitando projeto...
 	git add --all
 	git commit -m %commit_msg%
