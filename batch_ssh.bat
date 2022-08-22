@@ -43,8 +43,8 @@ if NOT %commit_msg%=="2" (
 
 	git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
 	git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
-	set /p HASH=<"hash.txt"
-	set /p DATA=<"data.txt"
+	set /p HASH=<".\hash.txt"
+	set /p DATA=<".\data.txt"
 
 	del "hash.txt"
 	del "data.txt"
