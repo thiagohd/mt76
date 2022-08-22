@@ -1,4 +1,4 @@
-@ECHO off
+@ECHO on
 cls
 set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
@@ -17,9 +17,12 @@ set commit_msg =
 echo Digite uma mensagem para commitar o projeto, ou digite as opcoes abaixo e pressione enter:
 echo [ 1 ] para cancelar operacao
 echo [ 2 ] para pular commit e seguir para compilacao/gravacao
-set /p commit_msg=
 
-if %commit_msg%==1 (
+set commit_msg=
+set /p commit_msg=
+echo %commit_msg%
+pause
+if %commit_msg%=='1' (
 	echo Cancelado!
 	goto finish
 )
@@ -27,7 +30,7 @@ echo continuar
 pause
 del "C:\Users\xpert\.ssh\known_hosts"
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
-if NOT %commit_msg%==2 (
+if NOT %commit_msg%=='2' (
 	echo Commitando projeto...
 	git add --all
 	git commit -m "%commit_msg%"
@@ -41,7 +44,7 @@ if NOT %commit_msg%==2 (
 	del "hash.txt"
 	del "data.txt"
 	
-	plink -ssh -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 )
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
