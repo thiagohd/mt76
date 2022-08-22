@@ -1,4 +1,4 @@
-@ECHO off
+@ECHO on
 cls
 set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
@@ -43,7 +43,6 @@ if NOT %commit_msg%=="2" (
 
 	git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
 	git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
-	pause
 	set /p HASH=<"hash.txt"
 	set /p DATA=<"data.txt"
 
@@ -51,6 +50,8 @@ if NOT %commit_msg%=="2" (
 	del "data.txt"
 	
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+	
+	pause
 )
 
 plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
