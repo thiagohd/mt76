@@ -2,6 +2,8 @@
 cls
 set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
+set GIT_URL=https://github.com/thiagohd/mt76
+
 set vm_user_ip=fabio@192.168.1.89
 
 set router_ip=192.168.171.
@@ -49,6 +51,8 @@ if NOT %commit_msg%=="2" (
 	del "hash.txt"
 	del "data.txt"
 )
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_URL/c\PKG_SOURCE_URL:=%GIT_URL%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+
 if NOT %commit_msg%=="2" (
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 )
