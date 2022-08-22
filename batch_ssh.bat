@@ -2,7 +2,7 @@
 cls
 set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
-set vm_user_ip=fabio@192.168.1.49
+set vm_user_ip=fabio@192.168.1.89
 
 set router_ip=192.168.171.1
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
