@@ -494,7 +494,7 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	for (i = 0; i < sband->n_channels; i++) {
 		chan = &sband->channels[i];
 		chan->max_power = min_t(int, chan->max_reg_power, target_power);
-		chan->orig_mpwr = target_power*2;
+		chan->orig_mpwr = target_power;
 		printk("[deicke] chan[%d]_max_power = %d | orig = %d", i, chan->max_power, chan->orig_mpwr);
 	}
 }

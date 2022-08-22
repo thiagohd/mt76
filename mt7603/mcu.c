@@ -402,7 +402,7 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 
 	result = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
 				 &req, sizeof(req), true);
-	//printk("RESULT = %d\n",result);
+	printk("RESULT = %d\n",result);
 	return result;
 }
 
