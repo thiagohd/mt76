@@ -4,17 +4,31 @@ set openwrt_remote_root_dir=/home/fabio/Downloads/openwrt
 
 set vm_user_ip=fabio@192.168.1.89
 
-set router_ip=192.168.171.1
+set router_ip=192.168.171.
+set ip_msg =
+set /p ip_msg=Digite o final do IP do roteador (1, 10, 20, 30 ...): 
+
+set router_ip=%router_ip%%ip_msg%
+
 echo "Maquina virtual: " %vm_user_ip% ":/"%openwrt_remote_root_dir% 
 echo "Roteador a atualizar: " %router_ip%
-
+echo.
 set commit_msg =
-set /p commit_msg=Digite a mensagem e commit: 
+echo Digite a mensagem para commit, ou
+echo 'c' para cancelar operacao, ou
+set /p commit_msg='p' para pular commit e seguir para compilacao/gravacao: 
 echo %commit_msg%
+
+if %commit_msg%==c (
+	goto finish
+)
+
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
-git add --all
-git commit -m "%commit_msg%"
-git push 
+if %commit_msg%==p (
+	git add --all
+	git commit -m "%commit_msg%"
+	git push 
+)
 
 git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
 git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
@@ -37,4 +51,5 @@ scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
 
 echo y | plink -ssh root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
+:finish
 pause
