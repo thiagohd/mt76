@@ -365,12 +365,15 @@ mt76x2_get_power_info_2g(struct mt76x02_dev *dev,
 
 	t->chain[chain].tssi_slope = data[0];
 	t->chain[chain].tssi_offset = data[1];
-	t->chain[chain].target_power = data[2];
+	//t->chain[chain].target_power = data[2];
+	//t->chain[chain].target_power = data[2];
+	t->chain[chain].target_power = 60;
 	t->chain[chain].delta =
 		mt76x02_sign_extend_optional(data[delta_idx], 7);
 
-	val = mt76x02_eeprom_get(dev, MT_EE_RF_2G_TSSI_OFF_TXPOWER);
-	t->target_power = val >> 8;
+	//val = mt76x02_eeprom_get(dev, MT_EE_RF_2G_TSSI_OFF_TXPOWER);
+	//t->target_power = val >> 8;
+	t->target_power = 60;
 }
 
 static void
@@ -417,12 +420,14 @@ mt76x2_get_power_info_5g(struct mt76x02_dev *dev,
 
 	t->chain[chain].tssi_slope = data[0];
 	t->chain[chain].tssi_offset = data[1];
-	t->chain[chain].target_power = data[2];
+	// t->chain[chain].target_power = data[2];
+	t->chain[chain].target_power = 60;
 	t->chain[chain].delta =
 		mt76x02_sign_extend_optional(data[delta_idx], 7);
 
-	val = mt76x02_eeprom_get(dev, MT_EE_RF_2G_RX_HIGH_GAIN);
-	t->target_power = val & 0xff;
+	//val = mt76x02_eeprom_get(dev, MT_EE_RF_2G_RX_HIGH_GAIN);
+	//t->target_power = val & 0xff;
+	t->target_power = 60;
 }
 
 void mt76x2_get_power_info(struct mt76x02_dev *dev,
