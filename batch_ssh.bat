@@ -35,6 +35,8 @@ IF %commit_msg%=="1" (
 
 del "C:\Users\xpert\.ssh\known_hosts"
 
+
+
 cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
 
 if NOT %commit_msg%=="2" (
@@ -73,7 +75,7 @@ if NOT %commit_msg%=="3" (
 )
 pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin" ./%router_ip%.bin
 
-scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
+pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
 
 echo y | plink -ssh root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
