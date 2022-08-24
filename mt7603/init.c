@@ -482,7 +482,7 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	printk("[deicke] target_power+offset = power_limit = txpower_cur = val_0x%02X[%d]", target_power, target_power);
 
 
-	//target_power = DIV_ROUND_UP(target_power, 2);
+	target_power = DIV_ROUND_UP(target_power, 2);
 	printk("[deicke] target_power = val_0x%02X[%d]", target_power,target_power);
 
 	//target_power = 27;
