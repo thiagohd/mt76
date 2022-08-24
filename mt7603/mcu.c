@@ -357,7 +357,7 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 		.tssi = EEP_VAL(MT_EE_NIC_CONF_1 + 1),
 		.temp_comp = EEP_VAL(MT_EE_NIC_CONF_1),
 		.target_power = {
-			EEP_VAL(MT_EE_TX_POWER_0_START_2G + 2),
+			54,//EEP_VAL(MT_EE_TX_POWER_0_START_2G + 2),
 			EEP_VAL(MT_EE_TX_POWER_1_START_2G + 2)
 		},
 		.bw_power_delta = EEP_VAL(MT_EE_TX_POWER_DELTA_BW40),
@@ -396,9 +396,6 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 	for(i = 0; i < 14; i++){
 		printk("[deicke] rate_power_delta[%d] = %03u (0x%02X)\n", i, req.rate_power_delta[i], req.rate_power_delta[i]);
 	}
-	//req.target_power[0] = 54;
-	//req.target_power[1] = 40;
-	//printk("after target power = %d|%d\n",(int)req.target_power[0],(int)req.target_power[1]);
 
 	result = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_SET_TX_POWER_CTRL,
 				 &req, sizeof(req), true);

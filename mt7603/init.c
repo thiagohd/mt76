@@ -475,7 +475,9 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	printk("[deicke] max offset 0x%02X[%d]", max_offset, max_offset);
 
 	target_power += max_offset;
+	target_power = 54;
 
+	
 	dev->tx_power_limit = target_power;
 	dev->mphy.txpower_cur = target_power;
 
