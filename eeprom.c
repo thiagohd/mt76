@@ -12,6 +12,7 @@
 int mt76_get_of_eeprom(struct mt76_dev *dev, void *eep, int offset, int len)
 {
 #if defined(CONFIG_OF) && defined(CONFIG_MTD)
+#warning !!!!!!!!!!!!!!!!!!!!!!!! compilando com CONFIG_OF!!!!!!!!!!!!!!!!!!!!!!!!!!
 	struct device_node *np = dev->dev->of_node;
 	struct mtd_info *mtd;
 	const __be32 *list;
