@@ -411,7 +411,6 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 	struct cfg80211_chan_def *chandef = &dev->mphy.chandef;
 	struct ieee80211_hw *hw = mt76_hw(dev);
 	int n_chains = hweight8(dev->mphy.antenna_mask);
-	printk("[deicke] ##################################### mt7603_mcu_set_channel #########################################\n");
 
 	struct {
 		u8 control_chan;
@@ -432,6 +431,7 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 	s8 tx_power = hw->conf.power_level * 2;
 	int i, ret;
 
+	printk("[deicke] ##################################### mt7603_mcu_set_channel #########################################\n");
 	printk("[deicke] target power first = %d | power_level_conf = %d\n",tx_power, tx_power/2);
 	if (dev->mphy.chandef.width == NL80211_CHAN_WIDTH_40) {
 		req.bw = MT_BW_40;
