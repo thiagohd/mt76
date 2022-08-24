@@ -357,14 +357,14 @@ static int mt7603_mcu_set_tx_power(struct mt7603_dev *dev)
 		.tssi = EEP_VAL(MT_EE_NIC_CONF_1 + 1),
 		.temp_comp = EEP_VAL(MT_EE_NIC_CONF_1),
 		.target_power = {
-			54,//EEP_VAL(MT_EE_TX_POWER_0_START_2G + 2),
-			EEP_VAL(MT_EE_TX_POWER_1_START_2G + 2)
+			35,//EEP_VAL(MT_EE_TX_POWER_0_START_2G + 2),
+			35//EEP_VAL(MT_EE_TX_POWER_1_START_2G + 2)
 		},
 		.bw_power_delta = EEP_VAL(MT_EE_TX_POWER_DELTA_BW40),
 		.ch_power_delta = {
-			EEP_VAL(MT_EE_TX_POWER_0_START_2G + 3),
-			EEP_VAL(MT_EE_TX_POWER_0_START_2G + 4),
-			EEP_VAL(MT_EE_TX_POWER_0_START_2G + 5),
+			0, //EEP_VAL(MT_EE_TX_POWER_0_START_2G + 3),
+			0, //EEP_VAL(MT_EE_TX_POWER_0_START_2G + 4),
+			0, //EEP_VAL(MT_EE_TX_POWER_0_START_2G + 5),
 			EEP_VAL(MT_EE_TX_POWER_1_START_2G + 3),
 			EEP_VAL(MT_EE_TX_POWER_1_START_2G + 4),
 			EEP_VAL(MT_EE_TX_POWER_1_START_2G + 5)
