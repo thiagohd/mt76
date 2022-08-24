@@ -78,7 +78,7 @@ pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x
 
 pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
 
-echo y | plink -ssh root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
+echo y | plink -ssh -batch root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
 :finish
 pause
