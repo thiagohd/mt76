@@ -60,6 +60,7 @@ Habilitar htop
 Habilitar attended upgrade
 
 > Base system > <*> auc
+> LuCI > Applications > <*> luci-app-attendedsysupgrade
 
 Caso já não tenha um arquivo padrão de configuração: openwrt/files/etc/config/
 https://forum.archive.openwrt.org/viewtopic.php?id=73217
