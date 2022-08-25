@@ -12,8 +12,6 @@ set /p ip_msg=Digite o final do IP do roteador (1, 10, 20, 30 ...):
 
 set router_ip=%router_ip%%ip_msg%
 
-set working_dir="C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke"
-
 echo Maquina virtual: %vm_user_ip%:%openwrt_remote_root_dir% 
 echo Roteador a atualizar: %router_ip%
 echo.
@@ -39,7 +37,7 @@ del "C:\Users\xpert\.ssh\known_hosts"
 
 
 
-cd %working_dir% 
+cd "C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke" 
 
 if NOT %commit_msg%=="2" (
 	if NOT %commit_msg%=="3" (
@@ -69,8 +67,6 @@ if NOT %commit_msg%=="2"  (
 )
 
 if NOT %commit_msg%=="3" (
-	pscp -r -pw asd123 %working_dir%\files %vm_user_ip%:%openwrt_remote_root_dir%
-	
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
 
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\bOpenWrt_([0-9]{1,3}.*){1,4}\b/OpenWrt_%ip_msg%/g' %openwrt_remote_root_dir%/files/etc/config/system"
