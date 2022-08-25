@@ -456,10 +456,8 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 
 	printk("[deicke] target_power (reg MT_EE_TX_POWER_0_START_2G+2 addr_0x%02X=val_0x%02X[%d])", (MT_EE_TX_POWER_0_START_2G + 2), target_power, target_power);
 
-	if (ext_pa && is_mt7603(dev)){
-		printk("[deicke] ext_pa && is_mt7603(dev)");
+	if (ext_pa && is_mt7603(dev))
 		target_power = eeprom[MT_EE_TX_POWER_TSSI_OFF] & ~BIT(7);
-	}
 
 	printk("[deicke] target_power (reg MT_EE_TX_POWER_TSSI_OFF addr_0x%02X=val_0x%02X[%d])", MT_EE_TX_POWER_TSSI_OFF, target_power, target_power);
 
@@ -472,13 +470,12 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	max_offset = 0;
 	for (i = 0; i < 14; i++) {
 		cur_offset = mt7603_txpower_signed(rate_power[i]);
-		printk("[deicke] rate_power[i] = %d | cur_offset = %d", rate_power[i], cur_offset);
 		max_offset = max(max_offset, cur_offset);
 	}
 	printk("[deicke] max offset 0x%02X[%d]", max_offset, max_offset);
 
 	target_power += max_offset;
-	target_power = 60;
+	target_power = 54;
 
 	
 	dev->tx_power_limit = target_power;
@@ -490,13 +487,12 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	target_power = DIV_ROUND_UP(target_power, 2);
 	printk("[deicke] target_power = val_0x%02X[%d]", target_power,target_power);
 
-	
+	//target_power = 27;
 
 	/* add 3 dBm for 2SS devices (combined output) */
-	//if (dev->mphy.antenna_mask & BIT(1))
-	//	target_power += 3;
-	//printk("[deicke] target_power 2SS? = val_0x%02X[%d]", target_power, target_power);
-
+	if (dev->mphy.antenna_mask & BIT(1))
+		target_power += 3;
+	printk("[deicke] target_power 2SS? = val_0x%02X[%d]", target_power, target_power);
 	for (i = 0; i < sband->n_channels; i++) {
 		chan = &sband->channels[i];
 		chan->max_power = min_t(int, chan->max_reg_power, target_power);
