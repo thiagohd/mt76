@@ -1,0 +1,74 @@
+Atenção, nenhuma ação deve ser feita em usuário root, pois alguns pacotes a serem compilados sofrem erros por conta disso:
+https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem
+
+# git clone -b v22.03.0-rc6 --single-branch http://github.com/openwrt/openwrt.git
+
+# make menuconfig
+
+-- Seleciona Target System: Mediatek Ralink MIPS
+-- Seleciona Subtarget: MT76x8 based boards
+-- Seleciona Target Profile: Wavlink WL-WN570HA1
+
+
+Alterar o feed do luci para uma versão commitada após https://github.com/openwrt/luci/commit/60137e9c5a1cb9afe91e276ef31df4c2a04fbde8
+Pode ser a master mesmo. (AINDA NÃO CONFIRMADO)
+Basta alterar o arquivo que fica na pasta raíz do openwrt, na linha correspondente ao luci:
+# nano feeds.conf.default
+
+
+# scripts/feeds update
+pode-se escolher por instalar todos os packages, desta forma estarão disponíveis no menuconfig:
+# scripts/feeds install -a
+ou então instalar um por um
+# scripts/feeds install -a -p kmod-batman-adv
+# scripts/feeds install -a -p batctl
+# scripts/feeds install -a -p batctl-full ---> nao precisa
+# scripts/feeds install -a -p luci
+# scripts/feeds install -a -p iperf --> ou netperf (dá pra usar Flent)
+# scripts/feeds install -a -p htop --> não precisa
+# scripts/feeds install -a -p auc
+# scripts/feeds install -a -p netdata --> não cabe na memória
+# scripts/feeds install luci-proto-batman-adv --> nao precisa
+# scripts/feeds install luci-app-firewall --> não precisa
+
+# make menuconfig
+
+Desabilitar wpad-basic-openssl/wolfssl, por problemas com incompatibilidades:
+
+> Network > WirelessAPD > < >wpad-basic[-openssl/wolfssl]
+
+Habilitar wpad-mesh-openssl:
+
+> Network > WirelessAPD > < >wpad-mesh-openssl
+
+Habilitar kmod-batman-adv:
+
+> Kernel modules > Network Support > <*>kmod-batman-adv
+
+Habilitar luci:
+
+> LuCI > Collections > <*> luci
+
+Habilitar iperf para testes:
+
+> Network > iperf <*>
+
+Habilitar htop
+
+> Administration > <*> htop
+
+Habilitar attended upgrade
+
+> Base system > <*> auc
+> LuCI > Applications > <*> luci-app-attendedsysupgrade
+
+Caso já não tenha um arquivo padrão de configuração: openwrt/files/etc/config/
+https://forum.archive.openwrt.org/viewtopic.php?id=73217
+Alterar o ip padrão no arquivo abaixo (procurando 192.168.1.1): 
+/package/base-files/files/bin/config_generate 
+
+# make -j1
+
+Para compilar um package específico, por exemplo para batman-adv: https://openwrt.org/docs/guide-developer/toolchain/single.package
+# make package/batman-adv/clean
+# make package/batman-adv/compile V=99
