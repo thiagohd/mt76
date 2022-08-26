@@ -330,10 +330,12 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 	for (i = 0; i < ARRAY_SIZE(req_fields); i++) {
 		data[i].addr = cpu_to_le16(req_fields[i]);
 		data[i].val = eep[req_fields[i]];
+/*		
 		if(data[i].addr == 0x55) data[i].val = 184;
 		if(data[i].addr == 0xF4) data[i].val = 187;
 		if(data[i].addr == 0x24) data[i].val = 16;
 		if(data[i].addr == 0x25) data[i].val = 1;
+*/
 		printk("[deicke] Addr: %04X = %04X (%d)", data[i].addr, data[i].val, data[i].val);
 	}
 

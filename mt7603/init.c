@@ -488,8 +488,8 @@ mt7603_init_txpower(struct mt7603_dev *dev,
 	//target_power = 27;
 
 	/* add 3 dBm for 2SS devices (combined output) */
-	//if (dev->mphy.antenna_mask & BIT(1))
-	//	target_power += 3;
+	if (dev->mphy.antenna_mask & BIT(1))
+		target_power += 3;
 	printk("[deicke] target_power 2SS? = val_0x%02X[%d]", target_power, target_power);
 	for (i = 0; i < sband->n_channels; i++) {
 		chan = &sband->channels[i];
