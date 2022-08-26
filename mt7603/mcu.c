@@ -449,8 +449,8 @@ int mt7603_mcu_set_channel(struct mt7603_dev *dev)
 	}
 
 	tx_power = mt76_get_sar_power(&dev->mphy, chandef->chan, tx_power);
-	if (dev->mphy.antenna_mask == 3)
-		tx_power -= 6;
+	//if (dev->mphy.antenna_mask == 3)
+	//	tx_power -= 6;
 	printk("[deicke] target power = %d | power_limit = %d\n",tx_power, dev->tx_power_limit);
 	tx_power = min(tx_power, dev->tx_power_limit);
 	
