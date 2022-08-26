@@ -24,8 +24,8 @@ ou então instalar um por um
 # scripts/feeds install -a -p batctl
 # scripts/feeds install -a -p batctl-full ---> nao precisa
 # scripts/feeds install -a -p luci
-# scripts/feeds install -a -p iperf
-# scripts/feeds install -a -p htop
+# scripts/feeds install -a -p iperf --> ou netperf (dá pra usar Flent)
+# scripts/feeds install -a -p htop --> não precisa
 # scripts/feeds install -a -p auc
 # scripts/feeds install -a -p netdata --> não cabe na memória
 # scripts/feeds install luci-proto-batman-adv --> nao precisa

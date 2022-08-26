@@ -276,7 +276,7 @@ mt7603_init_hardware(struct mt7603_dev *dev)
 	ret = mt7603_eeprom_init(dev);
 	if (ret < 0)
 		return ret;
-
+	printk("[deicke] mt7603_eeprom_init ret = %d", ret);
 	ret = mt7603_dma_init(dev);
 	if (ret)
 		return ret;

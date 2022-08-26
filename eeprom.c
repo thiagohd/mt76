@@ -21,23 +21,27 @@ int mt76_get_of_eeprom(struct mt76_dev *dev, void *eep, int offset, int len)
 	int size;
 	size_t retlen;
 	int ret;
-
+	printk("[deicke] get of eeprom started");
 	if (!np)
 		return -ENOENT;
 
 	data = of_get_property(np, "mediatek,eeprom-data", &size);
 	if (data) {
-		if (size > len)
+		if (size > len){
+			printk("[deicke] of_get_property size < len");
 			return -EINVAL;
+		}
 
 		memcpy(eep, data, size);
-
+		printk("[deicke] of_get_property returning 0");
 		return 0;
 	}
 
 	list = of_get_property(np, "mediatek,mtd-eeprom", &size);
-	if (!list)
+	if (!list){
+		printk("[deicke] list not ok");
 		return -ENOENT;
+	}
 
 	phandle = be32_to_cpup(list++);
 	if (!phandle)

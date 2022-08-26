@@ -128,8 +128,12 @@ mt7603_eeprom_load(struct mt7603_dev *dev)
 	int ret;
 
 	ret = mt76_eeprom_init(&dev->mt76, MT7603_EEPROM_SIZE);
-	if (ret < 0)
+	if (ret < 0){
+		if(ret == 0) printk("[deicke] mt76_eeprom_init ret < 0");
 		return ret;
+	}
+	if(ret == 0) printk("[deicke] Não foi possivel carregar da EEPROM");
+	else printk("[deicke] Parece que foi possivel carregar da EEPROM");
 
 	return mt7603_efuse_init(dev);
 }
@@ -159,15 +163,20 @@ int mt7603_eeprom_init(struct mt7603_dev *dev)
 	int ret;
 
 	ret = mt7603_eeprom_load(dev);
+	printk("[deicke] mt7603 eeprom load = %d", ret);
 	if (ret < 0)
 		return ret;
 
 	if (dev->mt76.otp.data) {
-		if (mt7603_check_eeprom(&dev->mt76) == 0)
+		printk("[deicke] otp.data valid");
+		if (mt7603_check_eeprom(&dev->mt76) == 0){}
+			printk("[deicke] check_eeprom == 0");
 			mt7603_apply_cal_free_data(dev, dev->mt76.otp.data);
-		else
+		}else{
+			printk("[deicke] check_eeprom != 0");
 			memcpy(dev->mt76.eeprom.data, dev->mt76.otp.data,
 			       MT7603_EEPROM_SIZE);
+		}	
 	}
 
 	eeprom = (u8 *)dev->mt76.eeprom.data;
