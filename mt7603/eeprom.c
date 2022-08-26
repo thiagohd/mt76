@@ -169,7 +169,7 @@ int mt7603_eeprom_init(struct mt7603_dev *dev)
 
 	if (dev->mt76.otp.data) {
 		printk("[deicke] otp.data valid");
-		if (mt7603_check_eeprom(&dev->mt76) == 0){}
+		if (mt7603_check_eeprom(&dev->mt76) == 0){
 			printk("[deicke] check_eeprom == 0");
 			mt7603_apply_cal_free_data(dev, dev->mt76.otp.data);
 		}else{
