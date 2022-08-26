@@ -109,11 +109,18 @@ mt7603_apply_cal_free_data(struct mt7603_dev *dev, u8 *efuse)
 	if (!np || !of_property_read_bool(np, "mediatek,eeprom-merge-otp"))
 		return;
 
-	if (!mt7603_has_cal_free_data(dev, efuse))
+	if (!mt7603_has_cal_free_data(dev, efuse)){
+		
+		printk("[deicke] DONT HAVE CALL FREE DATA");
 		return;
+	}
 
-	if (is_mt7628(dev))
+	if (is_mt7628(dev)){
+		printk("[deicke] is_mt7628");
 		n -= 4;
+	}else{
+		printk("[deicke] NOT is_mt7628");
+	}
 
 	for (i = 0; i < n; i++) {
 		int offset = cal_free_bytes[i];
@@ -169,7 +176,7 @@ int mt7603_eeprom_init(struct mt7603_dev *dev)
 
 	if (dev->mt76.otp.data) {
 		printk("[deicke] otp.data valid");
-		if (mt7603_check_eeprom(&dev->mt76) == 0){
+		if (0 && mt7603_check_eeprom(&dev->mt76) == 0){
 			printk("[deicke] check_eeprom == 0");
 			mt7603_apply_cal_free_data(dev, dev->mt76.otp.data);
 		}else{
