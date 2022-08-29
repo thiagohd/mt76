@@ -43,7 +43,7 @@ mt7603_efuse_init(struct mt7603_dev *dev)
 	u32 base = mt7603_reg_map(dev, MT_EFUSE_BASE);
 	int len = MT7603_EEPROM_SIZE;
 	void *buf;
-	int ret, i, ret_aux;
+	int ret, i, ret_aux = 0;
 	printk("[deicke] EFUSE INIT !!!!!!!");
 	if (mt76_rr(dev, base + MT_EFUSE_BASE_CTRL) & MT_EFUSE_BASE_CTRL_EMPTY){
 		printk("[deicke] EFUSE EMPTY !!!!!!!");
@@ -198,6 +198,7 @@ int mt7603_eeprom_init(struct mt7603_dev *dev)
 	dev->mphy.cap.has_2ghz = true;
 	memcpy(dev->mphy.macaddr, eeprom + MT_EE_MAC_ADDR, ETH_ALEN);
 	if(FORCE_USE_OTP_DATA){
+		printk("[deicke] FORCING OTP DATA");
 		memcpy(dev->mt76.eeprom.data, dev->mt76.otp.data, MT7603_EEPROM_SIZE);
 		eeprom = (u8 *)dev->mt76.eeprom.data;
 	}
