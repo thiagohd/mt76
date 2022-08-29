@@ -47,7 +47,9 @@ if NOT %commit_msg%=="2" (
 		git add --all
 		git commit -m %commit_msg%
 		git push 
-
+		echo Projeto commitado!
+		
+		echo Gerando dados do commit para compilacao!
 		git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
 		git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
 		set /p HASH=<".\hash.txt"
@@ -59,37 +61,45 @@ if NOT %commit_msg%=="2" (
 )
 
 if NOT %commit_msg%=="3" (
+	echo Atualizando PKG_SOURCE_URL para "%GIT_URL%"
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_URL/c\PKG_SOURCE_URL:=%GIT_URL%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 )
 
 if NOT %commit_msg%=="2"  (
 	if NOT %commit_msg%=="3" (
+		echo Atualizando PKG_SOURCE_VERSION para "%HASH%"
+		echo Atualizando PKG_SOURCE_DATE para "%DATA%"
 		plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 	)
 )
 
 if NOT %commit_msg%=="3" (
+	echo Copiando arquivos de configuracao base para o servidor
 	pscp -r -pw asd123 %working_dir%\files %vm_user_ip%:%openwrt_remote_root_dir%
 	
+	echo Atualizando IP de configuracao para "%router_ip%"
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
-
+	
+	echo Atualizando HOSTNAME para "OpenWrt_%ip_msg%"
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\bOpenWrt_([0-9]{1,3}.*){1,4}\b/OpenWrt_%ip_msg%/g' %openwrt_remote_root_dir%/files/etc/config/system"
 
 	if NOT %commit_msg%=="2" (
+		echo Limpando compilacao anterior e recompilando MT76
 		plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make package/kernel/mt76/clean ; make package/kernel/mt76/compile V=99"
 	)
-	
+	echo Compilando OpenWrt
 	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; make -j1"
 )
 
+echo Copiando binario gerado para diretorio local
 pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin" ./%router_ip%.bin
 
 del "C:\Users\xpert\.ssh\known_hosts"
-
+echo Copiando binario para o roteador %router_ip%
 pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
 
 del "C:\Users\xpert\.ssh\known_hosts"
-
+echo Enviando comando de atualizacao para o roteador %router_ip%
 echo y | plink -ssh -batch root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
 :finish
