@@ -84,7 +84,11 @@ if NOT %commit_msg%=="3" (
 
 pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin" ./%router_ip%.bin
 
+del "C:\Users\xpert\.ssh\known_hosts"
+
 pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
+
+del "C:\Users\xpert\.ssh\known_hosts"
 
 echo y | plink -ssh -batch root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
