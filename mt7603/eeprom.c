@@ -40,12 +40,11 @@ mt7603_efuse_read(struct mt7603_dev *dev, u32 base, u16 addr, u8 *data)
 static int
 mt7603_efuse_init(struct mt7603_dev *dev)
 {
-	printk("[deicke] EFUSE INIT !!!!!!!");
 	u32 base = mt7603_reg_map(dev, MT_EFUSE_BASE);
 	int len = MT7603_EEPROM_SIZE;
 	void *buf;
 	int ret, i, ret_aux;
-
+	printk("[deicke] EFUSE INIT !!!!!!!");
 	if (mt76_rr(dev, base + MT_EFUSE_BASE_CTRL) & MT_EFUSE_BASE_CTRL_EMPTY){
 		printk("[deicke] EFUSE EMPTY !!!!!!!");
 		return 0;
@@ -170,6 +169,8 @@ static inline bool is_mt7688(struct mt7603_dev *dev)
 	return mt76_rr(dev, MT_EFUSE_BASE + 0x64) & BIT(4);
 }
 
+#define FORCE_USE_OTP_DATA 1
+
 int mt7603_eeprom_init(struct mt7603_dev *dev)
 {
 	u8 *eeprom;
@@ -182,19 +183,24 @@ int mt7603_eeprom_init(struct mt7603_dev *dev)
 
 	if (dev->mt76.otp.data) {
 		printk("[deicke] otp.data valid");
-		if (0 && mt7603_check_eeprom(&dev->mt76) == 0){
+		if (!FORCE_USE_OTP_DATA && mt7603_check_eeprom(&dev->mt76) == 0){
 			printk("[deicke] check_eeprom == 0");
 			mt7603_apply_cal_free_data(dev, dev->mt76.otp.data);
 		}else{
 			printk("[deicke] check_eeprom != 0");
-			memcpy(dev->mt76.eeprom.data, dev->mt76.otp.data,
-			       MT7603_EEPROM_SIZE);
+			if(!FORCE_USE_OTP_DATA){
+				memcpy(dev->mt76.eeprom.data, dev->mt76.otp.data, MT7603_EEPROM_SIZE);
+			}
 		}	
 	}
 
 	eeprom = (u8 *)dev->mt76.eeprom.data;
 	dev->mphy.cap.has_2ghz = true;
 	memcpy(dev->mphy.macaddr, eeprom + MT_EE_MAC_ADDR, ETH_ALEN);
+	if(FORCE_USE_OTP_DATA){
+		memcpy(dev->mt76.eeprom.data, dev->mt76.otp.data, MT7603_EEPROM_SIZE);
+		eeprom = (u8 *)dev->mt76.eeprom.data;
+	}
 
 	/* Check for 1SS devices */
 	dev->mphy.antenna_mask = 3;
