@@ -58,7 +58,7 @@ mt7603_efuse_init(struct mt7603_dev *dev)
 	buf = dev->mt76.otp.data;
 	for (i = 0; i + 16 <= len; i += 16) {
 		ret = mt7603_efuse_read(dev, base, i, buf + i);
-		printk("[deicke] READ 0x%08X = 0x%08X 0x%08X 0x%08X 0x%08X", (u32 *)(base+i), buf[i], buf[i+1], buf[i+2], buf[i+3]);
+		printk("[deicke] READ 0x%08X = 0x%08X 0x%08X 0x%08X 0x%08X", (u32 *)(base+i), *((u32 *)(buf)), *((u32 *)(buf+4)), *((u32 *)(buf+8)), *((u32 *)(buf+12)));
 		if (ret)
 			ret_aux = ret;
 	}
