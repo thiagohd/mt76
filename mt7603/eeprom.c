@@ -40,13 +40,16 @@ mt7603_efuse_read(struct mt7603_dev *dev, u32 base, u16 addr, u8 *data)
 static int
 mt7603_efuse_init(struct mt7603_dev *dev)
 {
+	printk("[deicke] EFUSE INIT !!!!!!!");
 	u32 base = mt7603_reg_map(dev, MT_EFUSE_BASE);
 	int len = MT7603_EEPROM_SIZE;
 	void *buf;
-	int ret, i;
+	int ret, i, ret_aux;
 
-	if (mt76_rr(dev, base + MT_EFUSE_BASE_CTRL) & MT_EFUSE_BASE_CTRL_EMPTY)
+	if (mt76_rr(dev, base + MT_EFUSE_BASE_CTRL) & MT_EFUSE_BASE_CTRL_EMPTY){
+		printk("[deicke] EFUSE EMPTY !!!!!!!");
 		return 0;
+	}
 
 	dev->mt76.otp.data = devm_kzalloc(dev->mt76.dev, len, GFP_KERNEL);
 	dev->mt76.otp.size = len;
@@ -56,9 +59,12 @@ mt7603_efuse_init(struct mt7603_dev *dev)
 	buf = dev->mt76.otp.data;
 	for (i = 0; i + 16 <= len; i += 16) {
 		ret = mt7603_efuse_read(dev, base, i, buf + i);
+		printk("[deicke] RD 0x%08X = %08X", base+i, ret);
 		if (ret)
-			return ret;
+			ret_aux = ret;
 	}
+	if(ret_aux)
+		return ret_aux;
 
 	return 0;
 }
