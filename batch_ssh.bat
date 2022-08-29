@@ -94,7 +94,6 @@ if NOT %commit_msg%=="3" (
 echo Copiando binario gerado para diretorio local
 pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin" ./%router_ip%.bin
 
-del "C:\Users\xpert\.ssh\known_hosts"
 echo Copiando binario para o roteador %router_ip%
 pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
 
