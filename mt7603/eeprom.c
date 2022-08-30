@@ -116,7 +116,7 @@ mt7603_apply_cal_free_data(struct mt7603_dev *dev, u8 *efuse)
 
 	if (!mt7603_has_cal_free_data(dev, efuse)){
 		
-		printk("[deicke] DONT HAVE CALL FREE DATA");
+		printk("[deicke] DONT HAVE CAL FREE DATA");
 		return;
 	}
 
@@ -169,7 +169,7 @@ static inline bool is_mt7688(struct mt7603_dev *dev)
 	return mt76_rr(dev, MT_EFUSE_BASE + 0x64) & BIT(4);
 }
 
-#define FORCE_USE_OTP_DATA 1
+#define FORCE_USE_OTP_DATA 0
 
 int mt7603_eeprom_init(struct mt7603_dev *dev)
 {

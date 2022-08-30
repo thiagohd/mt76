@@ -1,0 +1,5 @@
+plink -ssh root@192.168.171.30 "for i in `seq 65536 4 90112`; do printf '0x%08X -> ' $i; echo $i > /sys/kernel/debug/ieee80211/phy0/mt76/regidx ; cat /sys/kernel/debug/ieee80211/phy0/mt76/regval; done" > reglog_30.txt
+
+
+#export regs
+plink -ssh root@192.168.171.20 "for i in `seq 65536 4 90112`; do echo $i > /sys/kernel/debug/ieee80211/phy0/mt76/regidx; printf 'echo 0x%08X > /sys/kernel/debug/ieee80211/phy0/mt76/regidx; echo 0x%08X > /sys/kernel/debug/ieee80211/phy0/mt76/regval\r\n' $i $(cat /sys/kernel/debug/ieee80211/phy0/mt76/regval); done" > reglog_20.txt

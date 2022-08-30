@@ -327,6 +327,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 	data = (struct req_data *)(req + sizeof(req_hdr));
 	memset(data, 0, size);
 	printk("[deicke] mt7603_mcu_set_eeprom");
+	printk("[deicke] buff_mode = %d, len = %d", req_hdr.buffer_mode, req_hdr.len);
 	for (i = 0; i < ARRAY_SIZE(req_fields); i++) {
 		data[i].addr = cpu_to_le16(req_fields[i]);
 		data[i].val = eep[req_fields[i]];
@@ -338,6 +339,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 */
 		printk("[deicke] Addr: %04X = %04X (%d)", data[i].addr, data[i].val, data[i].val);
 	}
+	
 
 	ret = mt76_mcu_send_msg(&dev->mt76, MCU_EXT_CMD_EFUSE_BUFFER_MODE,
 				req, len, true);
