@@ -332,8 +332,8 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 		data[i].addr = cpu_to_le16(req_fields[i]);
 		data[i].val = eep[req_fields[i]];
 		if(FORCE_USE_OTP_DATA){
-			if(data[i].addr == 0x55) data[i].val > 50 ? 50 : data[i].val;
-			if(data[i].addr == 0xF4) data[i].val > 60 ? 60 : data[i].val;
+			if(data[i].addr == 0x55) data[i].val > 50 ? data[i].val = 50 : data[i].val = data[i].val;
+			if(data[i].addr == 0xF4) data[i].val > 60 ? data[i].val = 60 : data[i].val = data[i].val;
 		}
 		//if(data[i].addr == 0x24) data[i].val = 16;
 		//if(data[i].addr == 0x25) data[i].val = 1;
