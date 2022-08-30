@@ -9,7 +9,7 @@
 #include "regs.h"
 
 
-#define FORCE_USE_OTP_DATA 0
+#define FORCE_USE_OTP_DATA 1
 
 
 #define MT7603_MAX_INTERFACES	4
