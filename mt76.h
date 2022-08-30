@@ -1378,7 +1378,7 @@ mt76_mcu_send_msg(struct mt76_dev *dev, int cmd, const void *data, int len,
 {
 	int i;
 	printk("[deicke] printing buffer to send (CMD = %08X, LEN = %d)", cmd, len);
-	for(i = 0; i < len; i++) printk(KERN_CONT, "%02X ", *((uint8_t *)(data + (int)i));
+	for(i = 0; i < len; i++) printk(KERN_CONT, "%02X ", *((uint8_t *)(data + (int)i)));
 	printk("");
 	return mt76_mcu_send_and_get_msg(dev, cmd, data, len, wait_resp, NULL);
 }
