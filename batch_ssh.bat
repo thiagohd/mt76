@@ -10,17 +10,18 @@ set router_ip=192.168.171.
 set ip_msg =
 set /p ip_msg=Digite o final do IP desejado para o roteador (1, 10, 20, 30 ...): 
 set /p ip_curr=Digite o final do IP atual do roteador (ou deixe vazio para usar o mesmo acima): 
-set router_ip=%router_ip%%ip_msg%
+
 set curr_router_ip=%router_ip%%ip_msg%
-IF [%ip_curr%]==[] (
+IF NOT [%ip_curr%]==[] (
 	set curr_router_ip=%router_ip%%ip_curr%
 )
-
+set router_ip=%router_ip%%ip_msg%
 
 set working_dir="C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke"
 
 echo Maquina virtual: %vm_user_ip%:%openwrt_remote_root_dir% 
-echo Roteador a atualizar: %router_ip%
+echo Roteador a atualizar: %curr_router_ip%
+echo Novo endereco de IP a ser configurado: %router_ip%
 echo.
 set commit_msg =
 echo Digite uma mensagem para commitar o projeto, ou digite as opcoes abaixo e pressione enter:
