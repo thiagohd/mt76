@@ -8,9 +8,14 @@ set vm_user_ip=fabio@192.168.1.89
 
 set router_ip=192.168.171.
 set ip_msg =
-set /p ip_msg=Digite o final do IP do roteador (1, 10, 20, 30 ...): 
-
+set /p ip_msg=Digite o final do IP desejado para o roteador (1, 10, 20, 30 ...): 
+set /p ip_curr=Digite o final do IP atual do roteador (ou deixe vazio para usar o mesmo acima): 
 set router_ip=%router_ip%%ip_msg%
+set curr_router_ip=%router_ip%%ip_msg%
+IF [%ip_curr%]==[] (
+	set curr_router_ip=%router_ip%%ip_curr%
+)
+
 
 set working_dir="C:\Users\xpert\OneDrive\XPERT\Deicke\GitLab\XPtec\Firmware\mt76_deicke"
 
@@ -94,12 +99,12 @@ if NOT %commit_msg%=="3" (
 echo Copiando binario gerado para diretorio local
 pscp -pw asd123 "%vm_user_ip%:%openwrt_remote_root_dir%/bin/targets/ramips/mt76x8/openwrt-ramips-mt76x8-wavlink_wl-wn570ha1-squashfs-sysupgrade.bin" ./%router_ip%.bin
 
-echo Copiando binario para o roteador %router_ip%
-pscp -scp ./%router_ip%.bin root@%router_ip%:/tmp/firmware.bin
+echo Copiando binario para o roteador %curr_router_ip%
+pscp -scp ./%router_ip%.bin root@%curr_router_ip%:/tmp/firmware.bin
 
 del "C:\Users\xpert\.ssh\known_hosts"
-echo Enviando comando de atualizacao para o roteador %router_ip%
-echo y | plink -ssh -batch root@%router_ip% "sysupgrade -v -n /tmp/firmware.bin"
+echo Enviando comando de atualizacao para o roteador %curr_router_ip%
+echo y | plink -ssh -batch root@%curr_router_ip% "sysupgrade -v -n /tmp/firmware.bin"
 
 :finish
 pause
