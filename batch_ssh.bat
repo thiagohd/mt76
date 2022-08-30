@@ -54,30 +54,24 @@ if NOT %commit_msg%=="2" (
 		git commit -m %commit_msg%
 		git push 
 		echo Projeto commitado!
-		
-		echo Gerando dados do commit para compilacao!
-		git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
-		git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
-		set /p HASH=<".\hash.txt"
-		set /p DATA=<".\data.txt"
-
-		del "hash.txt"
-		del "data.txt"
 	)
 )
 
-if NOT %commit_msg%=="3" (
-	echo Atualizando PKG_SOURCE_URL para "%GIT_URL%"
-	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_URL/c\PKG_SOURCE_URL:=%GIT_URL%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
-)
+echo Gerando dados do commit para compilacao!
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_VERSION:=%%H%%n > "hash.txt"
+git log -n 1 --date=short --pretty=format:PKG_SOURCE_DATE:=%%ad%%n > "data.txt"
+set /p HASH=<".\hash.txt"
+set /p DATA=<".\data.txt"
 
-if NOT %commit_msg%=="2"  (
-	if NOT %commit_msg%=="3" (
-		echo Atualizando PKG_SOURCE_VERSION para "%HASH%"
-		echo Atualizando PKG_SOURCE_DATE para "%DATA%"
-		plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
-	)
-)
+del "hash.txt"
+del "data.txt"
+
+echo Atualizando PKG_SOURCE_URL para "%GIT_URL%"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_URL/c\PKG_SOURCE_URL:=%GIT_URL%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
+
+echo Atualizando PKG_SOURCE_VERSION para "%HASH%"
+echo Atualizando PKG_SOURCE_DATE para "%DATA%"
+plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -i '/PKG_SOURCE_VERSION/c\%HASH%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile ; sed -i '/PKG_SOURCE_DATE/c\%DATA%' %openwrt_remote_root_dir%/package/kernel/mt76/Makefile"
 
 if NOT %commit_msg%=="3" (
 	echo Copiando arquivos de configuracao base para o servidor
