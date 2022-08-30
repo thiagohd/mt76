@@ -334,7 +334,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 		if(FORCE_USE_OTP_DATA){
 			if(data[i].addr == 0x55) data[i].val > 50 ? (data[i].val = 50) : (data[i].val = data[i].val*1);
 			if(data[i].addr == 0xF4) data[i].val > 60 ? (data[i].val = 60) : (data[i].val = data[i].val*1);
-			//if(data[i].val >= 128) data[i].val = 128;
+			if(data[i].val >= 170) data[i].val = 170;
 		}
 		//if(data[i].addr == 0x24) data[i].val = 16;
 		//if(data[i].addr == 0x25) data[i].val = 1;
