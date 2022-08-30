@@ -8,6 +8,10 @@
 #include "../mt76.h"
 #include "regs.h"
 
+
+#define FORCE_USE_OTP_DATA 0
+
+
 #define MT7603_MAX_INTERFACES	4
 #define MT7603_WTBL_SIZE	128
 #define MT7603_WTBL_RESERVED	(MT7603_WTBL_SIZE - 1)

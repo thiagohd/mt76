@@ -169,7 +169,6 @@ static inline bool is_mt7688(struct mt7603_dev *dev)
 	return mt76_rr(dev, MT_EFUSE_BASE + 0x64) & BIT(4);
 }
 
-#define FORCE_USE_OTP_DATA 0
 
 int mt7603_eeprom_init(struct mt7603_dev *dev)
 {
