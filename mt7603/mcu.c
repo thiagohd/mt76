@@ -429,6 +429,106 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			// if(data[i].addr == 0x013F) data[i].val = 0x00FF; // (255)
 
 
+
+
+
+
+
+
+
+			if(data[i].addr == 0x0024) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0025) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0034) data[i].val = 0x0022; //	NIC_CONFG_00
+			if(data[i].addr == 0x0035) data[i].val = 0x0034; //	NIC_CONFG_01 (EXT_PA)
+			if(data[i].addr == 0x0036) data[i].val = 0x0000; //	NIC_CONFG_10
+			if(data[i].addr == 0x0037) data[i].val = 0x0000; //	NIC_CONFG_11
+			if(data[i].addr == 0x0039) data[i].val = 0x0000; //	COUNTRY_REG
+			if(data[i].addr == 0x003B) data[i].val = 0x0001; //	LED_MODE
+			if(data[i].addr == 0x0042) data[i].val = 0x0022; //	NIC_CONFG_20
+			if(data[i].addr == 0x0043) data[i].val = 0x0000; //	NIC_CONFG_21
+			if(data[i].addr == 0x0048) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0050) data[i].val = 0x0082; //	TX_POWER_DELTA
+			if(data[i].addr == 0x0053) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0054) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0055) data[i].val = 0x00B0; //	TEMP_SEN_CAL
+			if(data[i].addr == 0x0056) data[i].val = 0x00C0; //	TX0_PA_TSSI_LSB
+			if(data[i].addr == 0x0057) data[i].val = 0x00CC; //	TX0_PA_TSSI_MSB
+			if(data[i].addr == 0x0058) data[i].val = 0x0023; //	TX0_POWER
+			if(data[i].addr == 0x0059) data[i].val = 0x0000; //	TX0_PWR_OFST_L
+			if(data[i].addr == 0x005A) data[i].val = 0x0000; //	TX0_PWR_OFST_M
+			if(data[i].addr == 0x005B) data[i].val = 0x0000; //	TX0_PWR_OFST_H
+			if(data[i].addr == 0x005C) data[i].val = 0x0040; //	TX1_PA_TSSI_LSB
+			if(data[i].addr == 0x005D) data[i].val = 0x00CC; //	TX1_PA_TSSI_MSB
+			if(data[i].addr == 0x005E) data[i].val = 0x0023; //	TX1_POWER
+			if(data[i].addr == 0x005F) data[i].val = 0x0000; //	TX1_PWR_OFST_L 
+			if(data[i].addr == 0x0060) data[i].val = 0x0000; //	TX1_PWR_OFST_M
+			if(data[i].addr == 0x0061) data[i].val = 0x0000; //	TX1_PWR_OFST_H
+			if(data[i].addr == 0x009E) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x009F) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x00A0) data[i].val = 0x00C6; //	TX_PWR_CCK_0
+			if(data[i].addr == 0x00A1) data[i].val = 0x00C6; //	TX_PWR_CCK_1
+			if(data[i].addr == 0x00A2) data[i].val = 0x00C6; //	TX_PWR_OFDM_0
+			if(data[i].addr == 0x00A3) data[i].val = 0x00C6; //	TX_PWR_OFDM_1
+			if(data[i].addr == 0x00A4) data[i].val = 0x00C6; //	TX_PWR_OFDM_2
+			if(data[i].addr == 0x00A5) data[i].val = 0x00C6; //	TX_PWR_OFDM_3
+			if(data[i].addr == 0x00A6) data[i].val = 0x00C6; //	TX_PWR_OFDM_4
+			if(data[i].addr == 0x00A7) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_0
+			if(data[i].addr == 0x00A8) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_1
+			if(data[i].addr == 0x00A9) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_2
+			if(data[i].addr == 0x00AA) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_3
+			if(data[i].addr == 0x00AB) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_4
+			if(data[i].addr == 0x00AC) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_5
+			if(data[i].addr == 0x00AD) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_6
+			if(data[i].addr == 0x00C0) data[i].val = 0x0000; //	EXT_LNA_RX_GAIN
+			if(data[i].addr == 0x00C1) data[i].val = 0x0000; //	EXT_LNA_RX_NF
+			if(data[i].addr == 0x00C2) data[i].val = 0x0000; //	EXT_LNA_RX_P1DB
+			if(data[i].addr == 0x00C3) data[i].val = 0x0000; //	EXT_LNA_BP_GAIN0
+			if(data[i].addr == 0x00C4) data[i].val = 0x0000; //	EXT_LNA_BP_GAIN1
+			if(data[i].addr == 0x00C5) data[i].val = 0x0000; //	EXT_LNA_BP_P1DB
+			if(data[i].addr == 0x00C6) data[i].val = 0x0000; //	STEP_NUM_NEG_7
+			if(data[i].addr == 0x00C7) data[i].val = 0x0000; //	STEP_NUM_NEG_6
+			if(data[i].addr == 0x00C8) data[i].val = 0x0000; //	STEP_NUM_NEG_5
+			if(data[i].addr == 0x00C9) data[i].val = 0x001A; //	STEP_NUM_NEG_4
+			if(data[i].addr == 0x00CA) data[i].val = 0x0022; //	STEP_NUM_NEG_3
+			if(data[i].addr == 0x00CB) data[i].val = 0x002A; //	STEP_NUM_NEG_2
+			if(data[i].addr == 0x00CC) data[i].val = 0x0031; //	STEP_NUM_NEG_1
+			if(data[i].addr == 0x00CD) data[i].val = 0x0035; //	STEP_NUM_NEG_0
+			if(data[i].addr == 0x00CE) data[i].val = 0x0001; //	STEP_NUM_REF
+			if(data[i].addr == 0x00CF) data[i].val = 0x0035; //	STEP_NUM_TEMP
+			if(data[i].addr == 0x00D0) data[i].val = 0x0039; //	STEP_NUM_POS_1
+			if(data[i].addr == 0x00D1) data[i].val = 0x0040; //	STEP_NUM_POS_2
+			if(data[i].addr == 0x00D2) data[i].val = 0x0046; //	STEP_NUM_POS_3
+			if(data[i].addr == 0x00D3) data[i].val = 0x004D; //	STEP_NUM_POS_4
+			if(data[i].addr == 0x00D4) data[i].val = 0x007F; //	STEP_NUM_POS_5
+			if(data[i].addr == 0x00D5) data[i].val = 0x007F; //	STEP_NUM_POS_6
+			if(data[i].addr == 0x00D6) data[i].val = 0x007F; //	STEP_NUM_POS_7
+			if(data[i].addr == 0x00F2) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x00F4) data[i].val = 0x00C0; //	XTAL_CAL
+			if(data[i].addr == 0x00F5) data[i].val = 0x0000; //	XTAL_TRIM2
+			if(data[i].addr == 0x00F6) data[i].val = 0x0000; //	XTAL_TRIM3
+			if(data[i].addr == 0x00F7) data[i].val = 0x0088; //	??
+			if(data[i].addr == 0x00F8) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x00F9) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x00FA) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x012E) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0130) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0131) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0132) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0133) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0134) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0135) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0136) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0137) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0138) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x0139) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013A) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013B) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013C) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013D) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013E) data[i].val = 0x0000; //	??
+			if(data[i].addr == 0x013F) data[i].val = 0x0000; //	??
+
+
 		}
 		//if(data[i].addr == 0x24) data[i].val = 16;
 		//if(data[i].addr == 0x25) data[i].val = 1;
