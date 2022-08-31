@@ -465,20 +465,20 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x0061) data[i].val = 0x0000; //	TX1_PWR_OFST_H
 			if(data[i].addr == 0x009E) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x009F) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x00A0) data[i].val = 0x00C6; //	TX_PWR_CCK_0
-			if(data[i].addr == 0x00A1) data[i].val = 0x00C6; //	TX_PWR_CCK_1
-			if(data[i].addr == 0x00A2) data[i].val = 0x00C6; //	TX_PWR_OFDM_0
-			if(data[i].addr == 0x00A3) data[i].val = 0x00C6; //	TX_PWR_OFDM_1
-			if(data[i].addr == 0x00A4) data[i].val = 0x00C6; //	TX_PWR_OFDM_2
-			if(data[i].addr == 0x00A5) data[i].val = 0x00C6; //	TX_PWR_OFDM_3
-			if(data[i].addr == 0x00A6) data[i].val = 0x00C6; //	TX_PWR_OFDM_4
-			if(data[i].addr == 0x00A7) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_0
-			if(data[i].addr == 0x00A8) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_1
-			if(data[i].addr == 0x00A9) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_2
-			if(data[i].addr == 0x00AA) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_3
-			if(data[i].addr == 0x00AB) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_4
-			if(data[i].addr == 0x00AC) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_5
-			if(data[i].addr == 0x00AD) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_6
+			if(data[i].addr == 0x00A0) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_CCK_0
+			if(data[i].addr == 0x00A1) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_CCK_1
+			if(data[i].addr == 0x00A2) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_0
+			if(data[i].addr == 0x00A3) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_1
+			if(data[i].addr == 0x00A4) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_2
+			if(data[i].addr == 0x00A5) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_3
+			if(data[i].addr == 0x00A6) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_4
+			if(data[i].addr == 0x00A7) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_0
+			if(data[i].addr == 0x00A8) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_1
+			if(data[i].addr == 0x00A9) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_2
+			if(data[i].addr == 0x00AA) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_3
+			if(data[i].addr == 0x00AB) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_4
+			if(data[i].addr == 0x00AC) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_5
+			if(data[i].addr == 0x00AD) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_6
 			if(data[i].addr == 0x00C0) data[i].val = 0x0000; //	EXT_LNA_RX_GAIN
 			if(data[i].addr == 0x00C1) data[i].val = 0x0000; //	EXT_LNA_RX_NF
 			if(data[i].addr == 0x00C2) data[i].val = 0x0000; //	EXT_LNA_RX_P1DB
