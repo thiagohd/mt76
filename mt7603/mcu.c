@@ -441,7 +441,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x0034) data[i].val = 0x0011; //0x0022; //	NIC_CONFG_00
 
 			// Aparentemente mudando o terceiro bit para 1 liga o EXT_PA
-			if(data[i].addr == 0x0035) data[i].val = 0x0037; //0x0034; //	NIC_CONFG_01 (EXT_PA) MUDANDO PARA 0XFF AUMENTA POTENCIA 
+			if(data[i].addr == 0x0035) data[i].val = 0x0036; //0x0034; //	NIC_CONFG_01 (EXT_PA) MUDANDO PARA 0XFF AUMENTA POTENCIA 
 			if(data[i].addr == 0x0036) data[i].val = 0x0000; //	NIC_CONFG_10
 			if(data[i].addr == 0x0037) data[i].val = 0x0000; //	NIC_CONFG_11
 			if(data[i].addr == 0x0039) data[i].val = 0x0000; //	COUNTRY_REG
