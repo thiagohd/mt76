@@ -447,7 +447,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x0042) data[i].val = 0x0022; //	NIC_CONFG_20
 			if(data[i].addr == 0x0043) data[i].val = 0x0000; //	NIC_CONFG_21
 			if(data[i].addr == 0x0048) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x0050) data[i].val = 0x0000; //0x0082; //	TX_POWER_DELTA
+			if(data[i].addr == 0x0050) data[i].val = 0x00FF; //0x0082; //	TX_POWER_DELTA
 			if(data[i].addr == 0x0053) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x0054) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x0055) data[i].val = 0x00B2;//0x00B0; //	TEMP_SEN_CAL
