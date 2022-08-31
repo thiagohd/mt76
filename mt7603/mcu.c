@@ -453,7 +453,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x0055) data[i].val = 0x00B2;//0x00B0; //	TEMP_SEN_CAL
 			if(data[i].addr == 0x0056) data[i].val = 0x00C0; //	TX0_PA_TSSI_LSB
 			if(data[i].addr == 0x0057) data[i].val = 0x00CC; //	TX0_PA_TSSI_MSB
-			if(data[i].addr == 0x0058) data[i].val = 0x0023; //	TX0_POWER
+			if(data[i].addr == 0x0058) data[i].val = 0x0023; //	TX0_POWER        // aumentar isso aqui não resolveu
 			if(data[i].addr == 0x0059) data[i].val = 0x0000; //	TX0_PWR_OFST_L
 			if(data[i].addr == 0x005A) data[i].val = 0x0000; //	TX0_PWR_OFST_M
 			if(data[i].addr == 0x005B) data[i].val = 0x0000; //	TX0_PWR_OFST_H
@@ -503,7 +503,7 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x00D5) data[i].val = 0x007F; //	STEP_NUM_POS_6
 			if(data[i].addr == 0x00D6) data[i].val = 0x007F; //	STEP_NUM_POS_7
 			if(data[i].addr == 0x00F2) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x00F4) data[i].val = 0x00C0; //	XTAL_CAL
+			if(data[i].addr == 0x00F4) data[i].val = 0x00B8; //0x00C0; //	XTAL_CAL
 			if(data[i].addr == 0x00F5) data[i].val = 0x0000; //	XTAL_TRIM2
 			if(data[i].addr == 0x00F6) data[i].val = 0x0000; //	XTAL_TRIM3
 			if(data[i].addr == 0x00F7) data[i].val = 0x0088; //	??
