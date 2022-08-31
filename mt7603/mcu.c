@@ -438,16 +438,18 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 
 			if(data[i].addr == 0x0024) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x0025) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x0034) data[i].val = 0x00FF; //0x0022; //	NIC_CONFG_00
-			if(data[i].addr == 0x0035) data[i].val = 0x0037; //0x0034; //	NIC_CONFG_01 (EXT_PA) MUDANDO PARA 0XFF AUMENTA POTENCIA
+			if(data[i].addr == 0x0034) data[i].val = 0x0022; //0x0022; //	NIC_CONFG_00
+
+			// Aparentemente mudando o terceiro bit para 1 liga o EXT_PA
+			if(data[i].addr == 0x0035) data[i].val = 0x0037; //0x0034; //	NIC_CONFG_01 (EXT_PA) MUDANDO PARA 0XFF AUMENTA POTENCIA 
 			if(data[i].addr == 0x0036) data[i].val = 0x0000; //	NIC_CONFG_10
 			if(data[i].addr == 0x0037) data[i].val = 0x0000; //	NIC_CONFG_11
 			if(data[i].addr == 0x0039) data[i].val = 0x0000; //	COUNTRY_REG
 			if(data[i].addr == 0x003B) data[i].val = 0x0001; //	LED_MODE
-			if(data[i].addr == 0x0042) data[i].val = 0x0022; //	NIC_CONFG_20   MUDANDO PARA 0XFF AUMENTA POTENCIA
-			if(data[i].addr == 0x0043) data[i].val = 0x0000; //	NIC_CONFG_21   MUDANDO PARA 0XFF AUMENTA POTENCIA
+			if(data[i].addr == 0x0042) data[i].val = 0x0022; //	NIC_CONFG_20
+			if(data[i].addr == 0x0043) data[i].val = 0x0000; //	NIC_CONFG_21   
 			if(data[i].addr == 0x0048) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x0050) data[i].val = 0x00FF; //0x0082; //	TX_POWER_DELTA
+			if(data[i].addr == 0x0050) data[i].val = 0x0000; //0x0082; //	TX_POWER_DELTA
 			if(data[i].addr == 0x0053) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x0054) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x0055) data[i].val = 0x00B2;//0x00B0; //	TEMP_SEN_CAL
@@ -465,20 +467,20 @@ int mt7603_mcu_set_eeprom(struct mt7603_dev *dev)
 			if(data[i].addr == 0x0061) data[i].val = 0x0000; //	TX1_PWR_OFST_H
 			if(data[i].addr == 0x009E) data[i].val = 0x0000; //	??
 			if(data[i].addr == 0x009F) data[i].val = 0x0000; //	??
-			if(data[i].addr == 0x00A0) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_CCK_0
-			if(data[i].addr == 0x00A1) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_CCK_1
-			if(data[i].addr == 0x00A2) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_0
-			if(data[i].addr == 0x00A3) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_1
-			if(data[i].addr == 0x00A4) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_2
-			if(data[i].addr == 0x00A5) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_3
-			if(data[i].addr == 0x00A6) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_OFDM_4
-			if(data[i].addr == 0x00A7) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_0
-			if(data[i].addr == 0x00A8) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_1
-			if(data[i].addr == 0x00A9) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_2
-			if(data[i].addr == 0x00AA) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_3
-			if(data[i].addr == 0x00AB) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_4
-			if(data[i].addr == 0x00AC) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_5
-			if(data[i].addr == 0x00AD) data[i].val = 0x00FF; //0x00C6; //	TX_PWR_HT_MCS_6
+			if(data[i].addr == 0x00A0) data[i].val = 0x00C6; //	TX_PWR_CCK_0
+			if(data[i].addr == 0x00A1) data[i].val = 0x00C6; //	TX_PWR_CCK_1
+			if(data[i].addr == 0x00A2) data[i].val = 0x00C6; //	TX_PWR_OFDM_0
+			if(data[i].addr == 0x00A3) data[i].val = 0x00C6; //	TX_PWR_OFDM_1
+			if(data[i].addr == 0x00A4) data[i].val = 0x00C6; //	TX_PWR_OFDM_2
+			if(data[i].addr == 0x00A5) data[i].val = 0x00C6; //	TX_PWR_OFDM_3
+			if(data[i].addr == 0x00A6) data[i].val = 0x00C6; //	TX_PWR_OFDM_4
+			if(data[i].addr == 0x00A7) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_0
+			if(data[i].addr == 0x00A8) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_1
+			if(data[i].addr == 0x00A9) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_2
+			if(data[i].addr == 0x00AA) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_3
+			if(data[i].addr == 0x00AB) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_4
+			if(data[i].addr == 0x00AC) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_5
+			if(data[i].addr == 0x00AD) data[i].val = 0x00C6; //	TX_PWR_HT_MCS_6
 			if(data[i].addr == 0x00C0) data[i].val = 0x0000; //	EXT_LNA_RX_GAIN
 			if(data[i].addr == 0x00C1) data[i].val = 0x0000; //	EXT_LNA_RX_NF
 			if(data[i].addr == 0x00C2) data[i].val = 0x0000; //	EXT_LNA_RX_P1DB
