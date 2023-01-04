@@ -83,7 +83,7 @@ static int mt7615_start(struct ieee80211_hw *hw)
 	ieee80211_queue_delayed_work(hw, &phy->mt76->mac_work, timeout);
 
 	if (!running)
-		mt7615_mac_reset_counters(dev);
+		mt7615_mac_reset_counters(phy);
 
 out:
 	mt7615_mutex_release(dev);
@@ -320,7 +320,7 @@ int mt7615_set_channel(struct mt7615_phy *phy)
 	if (ret)
 		goto out;
 
-	mt7615_mac_reset_counters(dev);
+	mt7615_mac_reset_counters(phy);
 	phy->noise = 0;
 	phy->chfreq = mt76_rr(dev, MT_CHFREQ(ext_phy));
 
@@ -473,7 +473,8 @@ static int mt7615_config(struct ieee80211_hw *hw, u32 changed)
 }
 
 static int
-mt7615_conf_tx(struct ieee80211_hw *hw, struct ieee80211_vif *vif, u16 queue,
+mt7615_conf_tx(struct ieee80211_hw *hw, struct ieee80211_vif *vif,
+	       unsigned int link_id, u16 queue,
 	       const struct ieee80211_tx_queue_params *params)
 {
 	struct mt76_vif *mvif = (struct mt76_vif *)vif->drv_priv;
@@ -555,7 +556,7 @@ static void mt7615_configure_filter(struct ieee80211_hw *hw,
 static void mt7615_bss_info_changed(struct ieee80211_hw *hw,
 				    struct ieee80211_vif *vif,
 				    struct ieee80211_bss_conf *info,
-				    u32 changed)
+				    u64 changed)
 {
 	struct mt7615_dev *dev = mt7615_hw_dev(hw);
 	struct mt7615_phy *phy = mt7615_hw_phy(hw);
@@ -570,6 +571,9 @@ static void mt7615_bss_info_changed(struct ieee80211_hw *hw,
 			mt7615_mac_set_timing(phy);
 		}
 	}
+
+	if (changed & BSS_CHANGED_ERP_CTS_PROT)
+		mt7615_mac_enable_rtscts(dev, vif, info->use_cts_prot);
 
 	if (changed & BSS_CHANGED_BEACON_ENABLED && info->enable_beacon) {
 		mt7615_mcu_add_bss_info(phy, vif, NULL, true);
@@ -595,7 +599,7 @@ static void mt7615_bss_info_changed(struct ieee80211_hw *hw,
 	}
 
 	if (changed & BSS_CHANGED_ASSOC)
-		mt7615_mac_set_beacon_filter(phy, vif, info->assoc);
+		mt7615_mac_set_beacon_filter(phy, vif, vif->cfg.assoc);
 
 	mt7615_mutex_release(dev);
 }
@@ -1194,12 +1198,16 @@ static void mt7615_sta_set_decap_offload(struct ieee80211_hw *hw,
 	struct mt7615_dev *dev = mt7615_hw_dev(hw);
 	struct mt7615_sta *msta = (struct mt7615_sta *)sta->drv_priv;
 
+	mt7615_mutex_acquire(dev);
+
 	if (enabled)
 		set_bit(MT_WCID_FLAG_HDR_TRANS, &msta->wcid.flags);
 	else
 		clear_bit(MT_WCID_FLAG_HDR_TRANS, &msta->wcid.flags);
 
 	mt7615_mcu_set_sta_decap_offload(dev, vif, sta);
+
+	mt7615_mutex_release(dev);
 }
 
 #ifdef CONFIG_PM
