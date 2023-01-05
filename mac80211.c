@@ -192,48 +192,42 @@ static const struct cfg80211_sar_capa mt76_sar_capa = {
 	.freq_ranges = &mt76_sar_freq_ranges[0],
 };
 
-static int mt76_led_init(struct mt76_phy *phy)
+static int mt76_led_init(struct mt76_dev *dev)
 {
-	struct mt76_dev *dev = phy->dev;
-	struct ieee80211_hw *hw = phy->hw;
+	struct device_node *np = dev->dev->of_node;
+	struct ieee80211_hw *hw = dev->hw;
+	int led_pin;
 
-	if (!phy->leds.cdev.brightness_set && !phy->leds.cdev.blink_set)
+	if (!dev->led_cdev.brightness_set && !dev->led_cdev.blink_set)
 		return 0;
 
-	snprintf(phy->leds.name, sizeof(phy->leds.name), "mt76-%s",
-		 wiphy_name(hw->wiphy));
+	snprintf(dev->led_name, sizeof(dev->led_name),
+		 "mt76-%s", wiphy_name(hw->wiphy));
 
-	phy->leds.cdev.name = phy->leds.name;
-	phy->leds.cdev.default_trigger =
+	dev->led_cdev.name = dev->led_name;
+	dev->led_cdev.default_trigger =
 		ieee80211_create_tpt_led_trigger(hw,
 					IEEE80211_TPT_LEDTRIG_FL_RADIO,
 					mt76_tpt_blink,
 					ARRAY_SIZE(mt76_tpt_blink));
 
-	if (phy == &dev->phy) {
-		struct device_node *np = dev->dev->of_node;
-
-		np = of_get_child_by_name(np, "led");
-		if (np) {
-			int led_pin;
-
-			if (!of_property_read_u32(np, "led-sources", &led_pin))
-				phy->leds.pin = led_pin;
-			phy->leds.al = of_property_read_bool(np,
-							     "led-active-low");
-			of_node_put(np);
-		}
+	np = of_get_child_by_name(np, "led");
+	if (np) {
+		if (!of_property_read_u32(np, "led-sources", &led_pin))
+			dev->led_pin = led_pin;
+		dev->led_al = of_property_read_bool(np, "led-active-low");
+		of_node_put(np);
 	}
 
-	return led_classdev_register(dev->dev, &phy->leds.cdev);
+	return led_classdev_register(dev->dev, &dev->led_cdev);
 }
 
-static void mt76_led_cleanup(struct mt76_phy *phy)
+static void mt76_led_cleanup(struct mt76_dev *dev)
 {
-	if (!phy->leds.cdev.brightness_set && !phy->leds.cdev.blink_set)
+	if (!dev->led_cdev.brightness_set && !dev->led_cdev.blink_set)
 		return;
 
-	led_classdev_unregister(&phy->leds.cdev);
+	led_classdev_unregister(&dev->led_cdev);
 }
 
 static void mt76_init_stream_cap(struct mt76_phy *phy,
@@ -273,8 +267,7 @@ static void mt76_init_stream_cap(struct mt76_phy *phy,
 	}
 	vht_cap->vht_mcs.rx_mcs_map = cpu_to_le16(mcs_map);
 	vht_cap->vht_mcs.tx_mcs_map = cpu_to_le16(mcs_map);
-	if (ieee80211_hw_check(phy->hw, SUPPORTS_VHT_EXT_NSS_BW))
-		vht_cap->vht_mcs.tx_highest |=
+	vht_cap->vht_mcs.tx_highest |=
 				cpu_to_le16(IEEE80211_VHT_EXT_NSS_BW_CAPABLE);
 }
 
@@ -449,12 +442,8 @@ mt76_phy_init(struct mt76_phy *phy, struct ieee80211_hw *hw)
 	ieee80211_hw_set(hw, SUPPORTS_CLONED_SKBS);
 	ieee80211_hw_set(hw, SUPPORTS_AMSDU_IN_AMPDU);
 	ieee80211_hw_set(hw, SUPPORTS_REORDERING_BUFFER);
-
-	if (!(dev->drv->drv_flags & MT_DRV_AMSDU_OFFLOAD)) {
-		ieee80211_hw_set(hw, TX_AMSDU);
-		ieee80211_hw_set(hw, TX_FRAG_LIST);
-	}
-
+	ieee80211_hw_set(hw, TX_AMSDU);
+	ieee80211_hw_set(hw, TX_FRAG_LIST);
 	ieee80211_hw_set(hw, MFP_CAPABLE);
 	ieee80211_hw_set(hw, AP_LINK_PS);
 	ieee80211_hw_set(hw, REPORTS_TX_ACK_STATUS);
@@ -523,12 +512,6 @@ int mt76_register_phy(struct mt76_phy *phy, bool vht,
 			return ret;
 	}
 
-	if (IS_ENABLED(CONFIG_MT76_LEDS)) {
-		ret = mt76_led_init(phy);
-		if (ret)
-			return ret;
-	}
-
 	wiphy_read_of_freq_limits(phy->hw->wiphy);
 	mt76_check_sband(phy, &phy->sband_2g, NL80211_BAND_2GHZ);
 	mt76_check_sband(phy, &phy->sband_5g, NL80211_BAND_5GHZ);
@@ -548,8 +531,6 @@ void mt76_unregister_phy(struct mt76_phy *phy)
 {
 	struct mt76_dev *dev = phy->dev;
 
-	if (IS_ENABLED(CONFIG_MT76_LEDS))
-		mt76_led_cleanup(phy);
 	mt76_tx_status_check(dev, true);
 	ieee80211_unregister_hw(phy->hw);
 	dev->phys[phy->band_idx] = NULL;
@@ -586,7 +567,6 @@ mt76_alloc_device(struct device *pdev, unsigned int size,
 	spin_lock_init(&dev->lock);
 	spin_lock_init(&dev->cc_lock);
 	spin_lock_init(&dev->status_lock);
-	spin_lock_init(&dev->wed_lock);
 	mutex_init(&dev->mutex);
 	init_waitqueue_head(&dev->tx_wait);
 
@@ -609,13 +589,9 @@ mt76_alloc_device(struct device *pdev, unsigned int size,
 	spin_lock_init(&dev->token_lock);
 	idr_init(&dev->token);
 
-	spin_lock_init(&dev->rx_token_lock);
-	idr_init(&dev->rx_token);
-
 	INIT_LIST_HEAD(&dev->wcid_list);
 
 	INIT_LIST_HEAD(&dev->txwi_cache);
-	INIT_LIST_HEAD(&dev->rxwi_cache);
 	dev->token_size = dev->drv->token_size;
 
 	for (i = 0; i < ARRAY_SIZE(dev->q_rx); i++)
@@ -667,7 +643,7 @@ int mt76_register_device(struct mt76_dev *dev, bool vht,
 	mt76_check_sband(&dev->phy, &phy->sband_6g, NL80211_BAND_6GHZ);
 
 	if (IS_ENABLED(CONFIG_MT76_LEDS)) {
-		ret = mt76_led_init(phy);
+		ret = mt76_led_init(dev);
 		if (ret)
 			return ret;
 	}
@@ -688,7 +664,7 @@ void mt76_unregister_device(struct mt76_dev *dev)
 	struct ieee80211_hw *hw = dev->hw;
 
 	if (IS_ENABLED(CONFIG_MT76_LEDS))
-		mt76_led_cleanup(&dev->phy);
+		mt76_led_cleanup(dev);
 	mt76_tx_status_check(dev, true);
 	ieee80211_unregister_hw(hw);
 }
@@ -970,12 +946,14 @@ void mt76_wcid_key_setup(struct mt76_dev *dev, struct mt76_wcid *wcid,
 }
 EXPORT_SYMBOL(mt76_wcid_key_setup);
 
-int mt76_rx_signal(u8 chain_mask, s8 *chain_signal)
+static int
+mt76_rx_signal(struct mt76_rx_status *status)
 {
+	s8 *chain_signal = status->chain_signal;
 	int signal = -128;
 	u8 chains;
 
-	for (chains = chain_mask; chains; chains >>= 1, chain_signal++) {
+	for (chains = status->chains; chains; chains >>= 1, chain_signal++) {
 		int cur, diff;
 
 		cur = *chain_signal;
@@ -997,7 +975,6 @@ int mt76_rx_signal(u8 chain_mask, s8 *chain_signal)
 
 	return signal;
 }
-EXPORT_SYMBOL(mt76_rx_signal);
 
 static void
 mt76_rx_convert(struct mt76_dev *dev, struct sk_buff *skb,
@@ -1027,7 +1004,7 @@ mt76_rx_convert(struct mt76_dev *dev, struct sk_buff *skb,
 	status->ampdu_reference = mstat.ampdu_ref;
 	status->device_timestamp = mstat.timestamp;
 	status->mactime = mstat.timestamp;
-	status->signal = mt76_rx_signal(mstat.chains, mstat.chain_signal);
+	status->signal = mt76_rx_signal(&mstat);
 	if (status->signal <= -128)
 		status->flag |= RX_FLAG_NO_SIGNAL_VAL;
 
@@ -1311,10 +1288,7 @@ void mt76_rx_poll_complete(struct mt76_dev *dev, enum mt76_rxq_id q,
 
 	while ((skb = __skb_dequeue(&dev->rx_skb[q])) != NULL) {
 		mt76_check_sta(dev, skb);
-		if (mtk_wed_device_active(&dev->mmio.wed))
-			__skb_queue_tail(&frames, skb);
-		else
-			mt76_rx_aggr_reorder(skb, &frames);
+		mt76_rx_aggr_reorder(skb, &frames);
 	}
 
 	mt76_rx_complete(dev, &frames, napi);
@@ -1496,7 +1470,7 @@ EXPORT_SYMBOL_GPL(mt76_get_sar_power);
 static void
 __mt76_csa_finish(void *priv, u8 *mac, struct ieee80211_vif *vif)
 {
-	if (vif->bss_conf.csa_active && ieee80211_beacon_cntdwn_is_complete(vif))
+	if (vif->csa_active && ieee80211_beacon_cntdwn_is_complete(vif))
 		ieee80211_csa_finish(vif);
 }
 
@@ -1518,7 +1492,7 @@ __mt76_csa_check(void *priv, u8 *mac, struct ieee80211_vif *vif)
 {
 	struct mt76_dev *dev = priv;
 
-	if (!vif->bss_conf.csa_active)
+	if (!vif->csa_active)
 		return;
 
 	dev->csa_complete |= ieee80211_beacon_cntdwn_is_complete(vif);

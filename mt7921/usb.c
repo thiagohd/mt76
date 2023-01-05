@@ -13,8 +13,7 @@
 #include "mac.h"
 
 static const struct usb_device_id mt7921u_device_table[] = {
-	{ USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff),
-		.driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
+	{ USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff) },
 	{ },
 };
 
@@ -107,7 +106,12 @@ mt7921u_mcu_send_message(struct mt76_dev *mdev, struct sk_buff *skb,
 	if (ret)
 		return ret;
 
-	mdev->mcu.timeout = 3 * HZ;
+	if (cmd == MCU_UNI_CMD(HIF_CTRL) ||
+	    cmd == MCU_UNI_CMD(SUSPEND) ||
+	    cmd == MCU_UNI_CMD(OFFLOAD))
+		mdev->mcu.timeout = HZ;
+	else
+		mdev->mcu.timeout = 3 * HZ;
 
 	if (cmd != MCU_CMD(FW_SCATTER))
 		ep = MT_EP_OUT_INBAND_CMD;
@@ -171,8 +175,7 @@ static int mt7921u_probe(struct usb_interface *usb_intf,
 {
 	static const struct mt76_driver_ops drv_ops = {
 		.txwi_size = MT_SDIO_TXD_SIZE,
-		.drv_flags = MT_DRV_RX_DMA_HDR | MT_DRV_HW_MGMT_TXQ |
-			     MT_DRV_AMSDU_OFFLOAD,
+		.drv_flags = MT_DRV_RX_DMA_HDR | MT_DRV_HW_MGMT_TXQ,
 		.survey_flags = SURVEY_INFO_TIME_TX |
 				SURVEY_INFO_TIME_RX |
 				SURVEY_INFO_TIME_BSS_RX,
@@ -180,7 +183,6 @@ static int mt7921u_probe(struct usb_interface *usb_intf,
 		.tx_complete_skb = mt7921_usb_sdio_tx_complete_skb,
 		.tx_status_data = mt7921_usb_sdio_tx_status_data,
 		.rx_skb = mt7921_queue_rx_skb,
-		.rx_check = mt7921_rx_check,
 		.sta_ps = mt7921_sta_ps,
 		.sta_add = mt7921_mac_sta_add,
 		.sta_assoc = mt7921_mac_sta_assoc,
@@ -205,27 +207,12 @@ static int mt7921u_probe(struct usb_interface *usb_intf,
 	struct ieee80211_hw *hw;
 	struct mt7921_dev *dev;
 	struct mt76_dev *mdev;
-	u8 features;
 	int ret;
 
-	features = mt7921_check_offload_capability(&usb_intf->dev, (const char *)
-						   id->driver_info);
 	ops = devm_kmemdup(&usb_intf->dev, &mt7921_ops, sizeof(mt7921_ops),
 			   GFP_KERNEL);
 	if (!ops)
 		return -ENOMEM;
-
-	if (!(features & MT7921_FW_CAP_CNM)) {
-		ops->remain_on_channel = NULL;
-		ops->cancel_remain_on_channel = NULL;
-		ops->add_chanctx = NULL;
-		ops->remove_chanctx = NULL;
-		ops->change_chanctx = NULL;
-		ops->assign_vif_chanctx = NULL;
-		ops->unassign_vif_chanctx = NULL;
-		ops->mgd_prepare_tx = NULL;
-		ops->mgd_complete_tx = NULL;
-	}
 
 	ops->stop = mt7921u_stop;
 
@@ -234,7 +221,6 @@ static int mt7921u_probe(struct usb_interface *usb_intf,
 		return -ENOMEM;
 
 	dev = container_of(mdev, struct mt7921_dev, mt76);
-	dev->fw_features = features;
 	dev->hif_ops = &hif_ops;
 
 	udev = usb_get_dev(udev);
@@ -314,34 +300,23 @@ static void mt7921u_disconnect(struct usb_interface *usb_intf)
 static int mt7921u_suspend(struct usb_interface *intf, pm_message_t state)
 {
 	struct mt7921_dev *dev = usb_get_intfdata(intf);
-	struct mt76_connac_pm *pm = &dev->pm;
 	int err;
-
-	pm->suspended = true;
-	flush_work(&dev->reset_work);
 
 	err = mt76_connac_mcu_set_hif_suspend(&dev->mt76, true);
 	if (err)
-		goto failed;
+		return err;
 
 	mt76u_stop_rx(&dev->mt76);
 	mt76u_stop_tx(&dev->mt76);
 
+	set_bit(MT76_STATE_SUSPEND, &dev->mphy.state);
+
 	return 0;
-
-failed:
-	pm->suspended = false;
-
-	if (err < 0)
-		mt7921_reset(&dev->mt76);
-
-	return err;
 }
 
 static int mt7921u_resume(struct usb_interface *intf)
 {
 	struct mt7921_dev *dev = usb_get_intfdata(intf);
-	struct mt76_connac_pm *pm = &dev->pm;
 	bool reinit = true;
 	int err, i;
 
@@ -363,21 +338,16 @@ static int mt7921u_resume(struct usb_interface *intf)
 	if (reinit || mt7921_dma_need_reinit(dev)) {
 		err = mt7921u_dma_init(dev, true);
 		if (err)
-			goto failed;
+			return err;
 	}
+
+	clear_bit(MT76_STATE_SUSPEND, &dev->mphy.state);
 
 	err = mt76u_resume_rx(&dev->mt76);
 	if (err < 0)
-		goto failed;
+		return err;
 
-	err = mt76_connac_mcu_set_hif_suspend(&dev->mt76, false);
-failed:
-	pm->suspended = false;
-
-	if (err < 0)
-		mt7921_reset(&dev->mt76);
-
-	return err;
+	return mt76_connac_mcu_set_hif_suspend(&dev->mt76, false);
 }
 #endif /* CONFIG_PM */
 

@@ -528,11 +528,6 @@ mt76u_process_rx_entry(struct mt76_dev *dev, struct urb *urb,
 
 	head_room = drv_flags & MT_DRV_RX_DMA_HDR ? 0 : MT_DMA_HDR_LEN;
 	data_len = min_t(int, len, data_len - head_room);
-
-	if (len == data_len &&
-	    dev->drv->rx_check && !dev->drv->rx_check(dev, data, data_len))
-		return 0;
-
 	skb = mt76u_build_rx_skb(dev, data, data_len, buf_size);
 	if (!skb)
 		return 0;
@@ -547,7 +542,7 @@ mt76u_process_rx_entry(struct mt76_dev *dev, struct urb *urb,
 		len -= data_len;
 		nsgs++;
 	}
-	dev->drv->rx_skb(dev, MT_RXQ_MAIN, skb, NULL);
+	dev->drv->rx_skb(dev, MT_RXQ_MAIN, skb);
 
 	return nsgs;
 }
@@ -766,9 +761,6 @@ static void mt76u_status_worker(struct mt76_worker *w)
 	struct mt76_queue *q;
 	int i;
 
-	if (!test_bit(MT76_STATE_RUNNING, &dev->phy.state))
-		return;
-
 	for (i = 0; i < IEEE80211_NUM_ACS; i++) {
 		q = dev->phy.q_tx[i];
 		if (!q)
@@ -788,11 +780,11 @@ static void mt76u_status_worker(struct mt76_worker *w)
 			wake_up(&dev->tx_wait);
 
 		mt76_worker_schedule(&dev->tx_worker);
-	}
 
-	if (dev->drv->tx_status_data &&
-	    !test_and_set_bit(MT76_READING_STATS, &dev->phy.state))
-		queue_work(dev->wq, &dev->usb.stat_work);
+		if (dev->drv->tx_status_data &&
+		    !test_and_set_bit(MT76_READING_STATS, &dev->phy.state))
+			queue_work(dev->wq, &dev->usb.stat_work);
+	}
 }
 
 static void mt76u_tx_status_data(struct work_struct *work)
@@ -1075,7 +1067,7 @@ int __mt76u_init(struct mt76_dev *dev, struct usb_interface *intf,
 
 	INIT_WORK(&usb->stat_work, mt76u_tx_status_data);
 
-	usb->data_len = usb_maxpacket(udev, usb_sndctrlpipe(udev, 0));
+	usb->data_len = usb_maxpacket(udev, usb_sndctrlpipe(udev, 0), 1);
 	if (usb->data_len < 32)
 		usb->data_len = 32;
 
