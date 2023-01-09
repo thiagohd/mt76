@@ -6,9 +6,9 @@ set GIT_URL=https://github.com/thiagohd/mt76
 
 set vm_user_ip=fabio@192.168.1.89
 
-set router_ip=192.168.171.
+set router_ip=192.168.
 set ip_msg =
-set /p ip_msg=Digite o final do IP desejado para o roteador (1, 10, 20, 30 ...): 
+set /p ip_msg=Digite o final do IP desejado para o roteador (168.1, 171.10, 175.20, ...) [deve seguir a mascara /21: 192.168.168.1 - 192.168.175.254]: 
 set /p ip_curr=Digite o final do IP atual do roteador (ou deixe vazio para usar o mesmo acima): 
 
 set curr_router_ip=%router_ip%%ip_msg%
@@ -78,10 +78,10 @@ if NOT %commit_msg%=="3" (
 	pscp -r -pw asd123 %working_dir%\files %vm_user_ip%:%openwrt_remote_root_dir%
 	
 	echo Atualizando IP de configuracao para "%router_ip%"
-	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.171.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
+	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\b192.168.[0-9]{1,3}.[0-9]{1,3}\b/%router_ip%/g' %openwrt_remote_root_dir%/files/etc/config/network"
 	
-	echo Atualizando HOSTNAME para "OpenWrt_%ip_msg%"
-	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\bOpenWrt_([0-9]{1,3}.*){1,4}\b/OpenWrt_%ip_msg%/g' %openwrt_remote_root_dir%/files/etc/config/system"
+@REM	echo Atualizando HOSTNAME para "OpenWrt_%ip_msg%"
+@REM	plink -ssh -batch -pw asd123 %vm_user_ip% "cd %openwrt_remote_root_dir% ; sed -r -i 's/\bOpenWrt_([0-9]{1,3}.*){1,4}\b/OpenWrt_%ip_msg%/g' %openwrt_remote_root_dir%/files/etc/config/system"
 
 	if NOT %commit_msg%=="2" (
 		echo Limpando compilacao anterior e recompilando MT76

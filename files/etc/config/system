@@ -1,6 +1,6 @@
 
 config system
-	option hostname 'OpenWrt_20'
+	option hostname 'SEAL_OpenWRT'
 	option timezone 'UTC'
 	option ttylogin '0'
 	option log_size '64'
