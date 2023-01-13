@@ -9,7 +9,7 @@ Pra entender como fazer na mão basta olhar os scripts BATCH.
 
 # Clonar projeto OpenWRT
 
-Clone a branch desejada, neste caso v22.03.0.
+Clone a branch desejada, neste caso a v22.03.0.
 
 `
 git clone -b v22.03.0 --single-branch http://github.com/openwrt/openwrt.git
