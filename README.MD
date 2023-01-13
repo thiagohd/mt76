@@ -97,53 +97,45 @@ make menuconfig
 `
 
 -- Selecionar Target System: Mediatek Ralink MIPS
+
 -- Selecionar Subtarget: MT76x8 based boards
+
 -- Selecionar Target Profile: Wavlink WL-WN570HA1
+
 
 ## Rede mesh (precisa)
 
 Desabilitar wpad-basic-openssl/wolfssl, por problemas com incompatibilidades:
 
-`
 > Network > WirelessAPD > < >wpad-basic[-openssl/wolfssl]
-`
 
 Habilitar wpad-mesh-openssl:
 
-`
 > Network > WirelessAPD > <*>wpad-mesh-openssl
-`
 
 Habilitar kmod-batman-adv:
 
-`
 > Kernel modules > Network Support > <*>kmod-batman-adv
-`
 
 ## Luci / página web (precisa)
 
 Habilitar luci:
 
-`
 > LuCI > Collections > <*> luci
-`
 
 ## Testes (não precisa)
 
 Habilitar iperf para testes:
 
-`
 > Network > iperf <*>
-`
 
 ## Ferramenta de update assistido (não precisa)
 
 Habilitar attended upgrade
 
-```
 > Base system > <*> auc
+
 > LuCI > Applications > <*> luci-app-attendedsysupgrade
-```
 
 ## Ferramentas wireless (não precisa)
 
